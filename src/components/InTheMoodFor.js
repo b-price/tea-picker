@@ -3,7 +3,7 @@ import { Button, Modal, Form, Row, Col } from "react-bootstrap";
 export default function InTheMoodFor({show, handleClose}) {
 
     return (
-        <Modal show={show} onClose={handleClose}>
+        <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
                 <Modal.Title>I'm in the mood for...</Modal.Title>
             </Modal.Header>
@@ -34,12 +34,12 @@ export default function InTheMoodFor({show, handleClose}) {
                             </Form.Select>
                         </Form.Group>
                         <Col>
-                            <Button variant="outlined-secondary" size="sm">Load Preset</Button>
+                            <Button variant="outline-secondary">Load Preset</Button>
                         </Col>
                     </Row>
                     <Row className="mb-3">
                         <Form.Group as={Col} controlId="moodYear">
-                            <Form.Label>Vessel</Form.Label>
+                            <Form.Label>Year</Form.Label>
                             <Form.Select defaultValue="Select...">
                                 <option>Select...</option>
                                 <option>2023</option>
@@ -48,7 +48,7 @@ export default function InTheMoodFor({show, handleClose}) {
                             </Form.Select>
                         </Form.Group>
                         <Col>
-                            <Button variant="outlined-primary" size="sm">Save Preset</Button>
+                            <Button variant="outline-primary">Save Preset</Button>
                         </Col>
                     </Row>
                     <Form.Group controlId="moodCost">

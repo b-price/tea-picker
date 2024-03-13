@@ -1,8 +1,14 @@
-import { Modal, Button } from 'react-bootstrap'
+import { Modal, Button, Container } from 'react-bootstrap'
 import Tea from './Tea'
+import AddTea from './AddTea'
+import { useState } from 'react'
 
 export default function Teas({show, handleClose}){
-    const teas = 5
+    const [showAddTea, setShowAddTea] = useState(false)
+    
+    function openAddTeaModal() {
+        setShowAddTea(true)
+    }
     return(
         <>
             <Modal show={show} onHide={handleClose} size="xl">
@@ -19,11 +25,14 @@ export default function Teas({show, handleClose}){
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={handleClose}>
+                <Button variant="primary" onClick={() => openAddTeaModal()}>
                     Add Tea
                 </Button>
                 </Modal.Footer>
             </Modal>
+            <Container>
+                <AddTea show={showAddTea} handleClose={() => setShowAddTea(false)} />
+            </Container>
         </>
     )
 }
