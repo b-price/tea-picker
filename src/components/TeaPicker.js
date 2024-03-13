@@ -9,11 +9,13 @@ import LastSession from './LastSession'
 import Teas from './Teas' 
 import Sessions from './Sessions'
 import Vessels from './Vessels'
+import PickTea from './PickTea'
 
 export default function TeaPicker(){
     const [showTeas, setShowTeas] = useState(false)
     const [showVessels, setShowVessels] = useState(false)
     const [showSessions, setShowSessions] = useState(false)
+    const [showPickTea, setShowPickTea] = useState(false)
     
     function openTeasModal() {
         setShowTeas(true)
@@ -24,13 +26,18 @@ export default function TeaPicker(){
     function openSessionsModal() {
         setShowSessions(true)
     }
+    function openPickTeaModal() {
+        setShowPickTea(true)
+    }
 
     return (
         <>
             <Container>
                 <Row xs={2} md={4} lg={6}>
                     <Col>
-                        <Button variant="primary" size="lg" >Pick Tea</Button>
+                        <Button variant="primary" size="lg" onClick={() => openPickTeaModal(true)}>
+                            Pick Tea
+                        </Button>
                     </Col>
                     <Col xs lg="2">
                         <Stack gap="2">
@@ -54,6 +61,7 @@ export default function TeaPicker(){
             <Teas show={showTeas} handleClose={() => setShowTeas(false)} />
             <Vessels show={showVessels} handleClose={() => setShowVessels(false)} />
             <Sessions show={showSessions} handleClose={() => setShowSessions(false)} />
+            <PickTea show={showPickTea} handleClose={() => setShowPickTea(false)} />
         </>
     )
 }
