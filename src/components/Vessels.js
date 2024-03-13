@@ -1,26 +1,26 @@
 import { Modal, Button } from 'react-bootstrap'
-import Tea from './Tea'
+import Vessel from './Vessel'
 
-export default function Teas({show, handleClose}){
-    const teas = 5
+export default function Vessels({show, handleClose}){
+    
     return(
         <>
-            <Modal show={show} onHide={handleClose} size="xl">
+            <Modal show={show} onHide={handleClose} >
                 <Modal.Header closeButton>
-                <Modal.Title>Teas</Modal.Title>
+                <Modal.Title>Vessels</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Tea />
-                    <Tea />
-                    <Tea />
-                    <Tea />
+                    <Vessel />
+                    <Vessel />
+                    <Vessel />
+                    <Vessel />
                 </Modal.Body>
                 <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
                 <Button variant="primary" onClick={handleClose}>
-                    Add Tea
+                    Add Vessel
                 </Button>
                 </Modal.Footer>
             </Modal>

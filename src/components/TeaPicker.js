@@ -6,15 +6,20 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import LastSession from './LastSession'
-import Teas from './Teas'
+import Teas from './Teas' 
 import Sessions from './Sessions'
+import Vessels from './Vessels'
 
 export default function TeaPicker(){
     const [showTeas, setShowTeas] = useState(false)
+    const [showVessels, setShowVessels] = useState(false)
     const [showSessions, setShowSessions] = useState(false)
-
+    
     function openTeasModal() {
         setShowTeas(true)
+    }
+    function openVesselsModal() {
+        setShowVessels(true)
     }
     function openSessionsModal() {
         setShowSessions(true)
@@ -32,7 +37,7 @@ export default function TeaPicker(){
                             <Button variant="outline-primary" onClick={() => openTeasModal(true)}>
                                 Teas
                             </Button>
-                            <Button variant="outline-primary" >
+                            <Button variant="outline-primary" onClick={() => openVesselsModal(true)}>
                                 Vessels
                             </Button>
                             <Button variant="outline-primary" onClick={() => openSessionsModal(true)}>
@@ -47,6 +52,7 @@ export default function TeaPicker(){
                 
             </Container>
             <Teas show={showTeas} handleClose={() => setShowTeas(false)} />
+            <Vessels show={showVessels} handleClose={() => setShowVessels(false)} />
             <Sessions show={showSessions} handleClose={() => setShowSessions(false)} />
         </>
     )

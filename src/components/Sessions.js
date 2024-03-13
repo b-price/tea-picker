@@ -7,7 +7,7 @@ export default function Sessions({show, handleClose}){
         <>
             <Modal show={show} onHide={handleClose} size="lg">
                 <Modal.Header closeButton>
-                <Modal.Title>Teas</Modal.Title>
+                <Modal.Title>Sessions</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Session />
@@ -20,7 +20,7 @@ export default function Sessions({show, handleClose}){
                     Close
                 </Button>
                 <Button variant="primary" onClick={handleClose}>
-                    Add Tea
+                    Add Session
                 </Button>
                 </Modal.Footer>
             </Modal>

@@ -12,10 +12,11 @@ export default function Tea(){
                 <TeaStat category={"Amount"} data={"62"} />
                 <TeaStat category={"Rating"} data={"9.5"} />
                 <TeaStat category={"Year"} data={"2022"} />
+                <TeaStat category={"Sessions"} data={"5"} />
                 
             </ListGroup>
-            <Button variant="outline-secondary" size="sm" className="m-2 me-auto">Edit</Button>
-            <Button variant="outline-danger" size="sm" className="m-2 me-auto">Delete</Button>
+            <Button variant="outline-secondary" size="sm" className="m-2 me-auto">Edit Tea</Button>
+            <Button variant="outline-danger" size="sm" className="m-2 me-auto">Delete Tea</Button>
         </>
     )
 }

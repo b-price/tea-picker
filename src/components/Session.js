@@ -13,8 +13,8 @@ export default function Session(){
                 <TeaStat category={"Rating"} data={"9.5"}/>
                 
             </ListGroup>
-            <Button variant="outline-secondary" size="sm" className="m-2 me-auto">Edit</Button>
-            <Button variant="outline-danger" size="sm" className="m-2 me-auto">Delete</Button>
+            <Button variant="outline-secondary" size="sm" className="m-2 me-auto">Edit Session</Button>
+            <Button variant="outline-danger" size="sm" className="m-2 me-auto">Delete Session</Button>
         </>
     )
 }
