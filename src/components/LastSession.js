@@ -1,5 +1,6 @@
 import Table from 'react-bootstrap/Table';
 import { Button, ListGroup, Card, ListGroupItem } from 'react-bootstrap';
+import TeaStat from './TeaStat'
 
 export default function LastSession() {
   return (
@@ -23,14 +24,4 @@ export default function LastSession() {
   );
 }
 
-function TeaStat({category, data}){
-  return (
-    <ListGroup.Item className="d-flex justify-content-between align-items-start">
-      <div className="ms-2 me-auto">
-        <div className="fw-bold">{ category }:</div>
-        {data}
-      </div>
-    </ListGroup.Item>
-  )
-}
 

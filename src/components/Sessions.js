@@ -1,7 +1,7 @@
 import { Modal, Button } from 'react-bootstrap'
-import Tea from './Tea'
+import Session from './Session'
 
-export default function Teas({show, handleClose}){
+export default function Sessions({show, handleClose}){
     const teas = 5
     return(
         <>
@@ -10,10 +10,10 @@ export default function Teas({show, handleClose}){
                 <Modal.Title>Teas</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Tea />
-                    <Tea />
-                    <Tea />
-                    <Tea />
+                    <Session />
+                    <Session />
+                    <Session />
+                    <Session />
                 </Modal.Body>
                 <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
