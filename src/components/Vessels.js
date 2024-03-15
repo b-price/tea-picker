@@ -1,7 +1,7 @@
 import { Modal, Button } from 'react-bootstrap'
 import Vessel from './Vessel'
 
-export default function Vessels({show, handleClose}){
+export default function Vessels({show, handleClose, openAddVesselModal}){
     
     return(
         <>
@@ -19,7 +19,7 @@ export default function Vessels({show, handleClose}){
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={handleClose}>
+                <Button variant="primary" onClick={() => openAddVesselModal()}>
                     Add Vessel
                 </Button>
                 </Modal.Footer>

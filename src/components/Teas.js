@@ -3,12 +3,10 @@ import Tea from './Tea'
 import AddTea from './AddTea'
 import { useState } from 'react'
 
-export default function Teas({show, handleClose}){
-    const [showAddTea, setShowAddTea] = useState(false)
+export default function Teas({show, handleClose, openAddTeaModal}){
     
-    function openAddTeaModal() {
-        setShowAddTea(true)
-    }
+    
+    
     return(
         <>
             <Modal show={show} onHide={handleClose} size="xl">
@@ -30,9 +28,7 @@ export default function Teas({show, handleClose}){
                 </Button>
                 </Modal.Footer>
             </Modal>
-            <Container>
-                <AddTea show={showAddTea} handleClose={() => setShowAddTea(false)} />
-            </Container>
+            
         </>
     )
 }

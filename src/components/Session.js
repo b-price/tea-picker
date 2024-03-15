@@ -1,7 +1,7 @@
 import { ListGroup, Button } from "react-bootstrap"
 import TeaStat from './TeaStat'
 
-export default function Session(){
+export default function Session({buttons = true}){
     return (
         <>
             <ListGroup horizontal={"lg"}>
@@ -13,8 +13,19 @@ export default function Session(){
                 <TeaStat category={"Rating"} data={"9.5"}/>
                 
             </ListGroup>
-            <Button variant="outline-secondary" size="sm" className="m-2 me-auto">Edit Session</Button>
-            <Button variant="outline-danger" size="sm" className="m-2 me-auto">Delete Session</Button>
+            <Buttons showButtons={buttons} />
         </>
     )
+}
+
+function Buttons({showButtons}){
+    if (showButtons){
+        return (
+            <>
+                <Button variant="outline-secondary" size="sm" className="m-2 me-auto">Edit Tea</Button>
+                <Button variant="outline-danger" size="sm" className="m-2 me-auto">Delete Tea</Button>
+            </>
+        )
+    }
+
 }

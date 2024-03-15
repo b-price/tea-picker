@@ -1,18 +1,22 @@
 import { Button, Modal, Form, Row, Col, InputGroup } from "react-bootstrap";
+import ReactDatePicker from "react-datepicker";
+import { useState } from "react";
 
-export default function AddTea({show, handleClose}) {
-
+export default function AddSession({show, handleClose}) {
+    const [startDate, setStartDate] = useState(new Date())
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Add Tea</Modal.Title>
+                <Modal.Title>Add Session</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
                     <Row className="mb-3">
                         <Form.Group as={Col} controlId="teaTeaName">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control required placeholder="Xianguan FT #8" />
+                            <Form.Label>Date</Form.Label>
+                            <Form.Control required>
+                                <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+                            </Form.Control>
                         </Form.Group>
                         <Form.Group as={Col} controlId="teaTeaType">
                             <Form.Label>Tea Type</Form.Label>
