@@ -1,13 +1,6 @@
 import { Modal, Button, Stack, Container } from 'react-bootstrap'
-import { useState } from 'react'
-import InTheMoodFor from './InTheMoodFor'
 
-export default function PickTea({show, handleClose}) {
-    const [showInTheMoodFor, setShowInTheMoodFor] = useState(false)
-    
-    function openInTheMoodForModal() {
-        setShowInTheMoodFor(true)
-    }
+export default function PickTea({show, handleClose, openTeaPickedModal, openInTheMoodForModal}) {
     return (
         <>
             <Modal show={show} onHide={handleClose} size="sm">
@@ -16,8 +9,10 @@ export default function PickTea({show, handleClose}) {
                 </Modal.Header>
                 <Modal.Body>
                     <Stack gap="4">
-                        <Button variant="primary" size="lg">Hit me!</Button>
-                        <Button variant="primary" onClick={() => openInTheMoodForModal(true)}>
+                        <Button variant="primary" size="lg" onClick={() => openTeaPickedModal()}>
+                            Hit me!
+                        </Button>
+                        <Button variant="primary" onClick={() => openInTheMoodForModal()}>
                             I'm in the mood for...
                         </Button>
                     </Stack>
@@ -29,9 +24,6 @@ export default function PickTea({show, handleClose}) {
                 </Button>
                 </Modal.Footer>
             </Modal>
-            <Container>
-                <InTheMoodFor show={showInTheMoodFor} handleClose={() => setShowInTheMoodFor(false)} />
-            </Container>
         </>
     )
 }

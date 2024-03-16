@@ -1,6 +1,6 @@
 import { Button, Modal, Form, Row, Col } from "react-bootstrap";
 
-export default function InTheMoodFor({show, handleClose}) {
+export default function InTheMoodFor({show, handleClose, openTeaPickedModal}) {
 
     return (
         <Modal show={show} onHide={handleClose}>
@@ -59,7 +59,7 @@ export default function InTheMoodFor({show, handleClose}) {
                         <Form.Label>Rating</Form.Label>
                         <Form.Range />
                     </Form.Group>
-                    <Button variant="primary" type="submit">
+                    <Button variant="primary" type="submit" onClick={() => openTeaPickedModal()}>
                         Pick Tea!
                     </Button>
                     

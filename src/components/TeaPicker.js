@@ -14,6 +14,8 @@ import Session from './Session'
 import AddTea from './AddTea'
 import AddVessel from './AddVessel'
 import AddSession from './AddSession'
+import TeaPicked from './TeaPicked'
+import InTheMoodFor from './InTheMoodFor'
 
 
 export default function TeaPicker(){
@@ -24,6 +26,8 @@ export default function TeaPicker(){
     const [showAddTea, setShowAddTea] = useState(false)
     const [showAddVessel, setShowAddVessel] = useState(false)
     const [showAddSession, setShowAddSession] = useState(false)
+    const [showTeaPicked, setShowTeaPicked] = useState(false)
+    const [showInTheMoodFor, setShowInTheMoodFor] = useState(false)
     
     function openTeasModal() {
         setShowTeas(true)
@@ -45,6 +49,12 @@ export default function TeaPicker(){
     }
     function openAddSessionModal() {
         setShowAddSession(true)
+    }
+    function openTeaPickedModal() {
+        setShowTeaPicked(true)
+    }
+    function openInTheMoodForModal() {
+        setShowInTheMoodFor(true)
     }
 
     return (
@@ -96,13 +106,29 @@ export default function TeaPicker(){
                 handleClose={() => setShowSessions(false)} 
                 openAddSessionModal={() => openAddSessionModal()}
             />
-            <PickTea show={showPickTea} handleClose={() => setShowPickTea(false)} />
+            <PickTea 
+                show={showPickTea} 
+                handleClose={() => setShowPickTea(false)} 
+                openTeaPickedModal={() => openTeaPickedModal()}
+                openInTheMoodForModal={() => openInTheMoodForModal()}
+            />
             <AddTea show={showAddTea} handleClose={() => setShowAddTea(false)} />
             <AddVessel show={showAddVessel} handleClose={() => setShowAddVessel(false)} />
             <AddSession 
                 show={showAddSession} 
                 handleClose={() => setShowAddSession(false)}
                 openAddTeaModal={() => openAddTeaModal()}
+            />
+            <TeaPicked 
+                show={showTeaPicked} 
+                handleClose={() => setShowTeaPicked(false)} 
+                openTeaPickedModal={() => openTeaPickedModal()}
+                openInTheMoodForModal={() => openInTheMoodForModal()}
+            />
+            <InTheMoodFor 
+                show={showInTheMoodFor}
+                handleClose={() => setShowInTheMoodFor(false)}
+                openTeaPickedModal={() => openTeaPickedModal()}
             />
         </>
     )
