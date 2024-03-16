@@ -6,7 +6,6 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { Card } from 'react-bootstrap'
-import LastSession from './LastSession'
 import Teas from './Teas' 
 import Sessions from './Sessions'
 import Vessels from './Vessels'
@@ -14,6 +13,7 @@ import PickTea from './PickTea'
 import Session from './Session'
 import AddTea from './AddTea'
 import AddVessel from './AddVessel'
+import AddSession from './AddSession'
 
 
 export default function TeaPicker(){
@@ -91,10 +91,19 @@ export default function TeaPicker(){
                 handleClose={() => setShowVessels(false)}
                 openAddVesselModal={() => openAddVesselModal()} 
             />
-            <Sessions show={showSessions} handleClose={() => setShowSessions(false)} />
+            <Sessions 
+                show={showSessions} 
+                handleClose={() => setShowSessions(false)} 
+                openAddSessionModal={() => openAddSessionModal()}
+            />
             <PickTea show={showPickTea} handleClose={() => setShowPickTea(false)} />
             <AddTea show={showAddTea} handleClose={() => setShowAddTea(false)} />
             <AddVessel show={showAddVessel} handleClose={() => setShowAddVessel(false)} />
+            <AddSession 
+                show={showAddSession} 
+                handleClose={() => setShowAddSession(false)}
+                openAddTeaModal={() => openAddTeaModal()}
+            />
         </>
     )
 }

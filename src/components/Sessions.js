@@ -1,8 +1,11 @@
 import { Modal, Button } from 'react-bootstrap'
 import Session from './Session'
 
-export default function Sessions({show, handleClose}){
-    const teas = 5
+export default function Sessions({
+    show, 
+    handleClose, 
+    openAddSessionModal
+}){
     return(
         <>
             <Modal show={show} onHide={handleClose} size="lg">
@@ -19,7 +22,7 @@ export default function Sessions({show, handleClose}){
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={handleClose}>
+                <Button variant="primary" onClick={() => openAddSessionModal()}>
                     Add Session
                 </Button>
                 </Modal.Footer>

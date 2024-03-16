@@ -16,6 +16,7 @@ export default function Tea({buttons = true}){
                 <TeaStat category={"Rating"} data={"9.5"} />
                 <TeaStat category={"Year"} data={"2022"} />
                 <TeaStat category={"Sessions"} data={"5"} />
+                <TeaStat category={"Tea:Water"} data={"4.5g/mL"} />
                 
             </ListGroup>
             

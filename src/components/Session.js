@@ -11,6 +11,7 @@ export default function Session({buttons = true}){
                 <TeaStat category={"Vendor"} data={"Floating Leaves"}/>
                 <TeaStat category={"Vessel"} data={"Small Gaiwan"}/>
                 <TeaStat category={"Rating"} data={"9.5"}/>
+                <TeaStat category={"Amount"} data={"3.5g"}/>
                 
             </ListGroup>
             <Buttons showButtons={buttons} />

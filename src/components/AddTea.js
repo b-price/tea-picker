@@ -30,7 +30,6 @@ export default function AddTea({show, handleClose}) {
                                 <Form.Control required placeholder="357" />
                                 <InputGroup.Text>grams</InputGroup.Text>
                             </InputGroup>
-                            
                         </Form.Group>
                         <Form.Group as={Col} controlId="teaVendor">
                             <Form.Label>Vendor</Form.Label>
@@ -57,21 +56,28 @@ export default function AddTea({show, handleClose}) {
                             <Form.Label>Rating 1-10</Form.Label>
                             <Form.Control placeholder="9" />
                         </Form.Group>
+                        <Form.Group as={Col} controlId="teaRatio">
+                            <Form.Label>Tea to Water Ratio</Form.Label>
+                            <InputGroup>
+                                <Form.Control placeholder="4.5" />
+                                <InputGroup.Text>g/mL</InputGroup.Text>
+                            </InputGroup>
+                        </Form.Group>
+                    </Row>
+                    <Row className="mb-3">
                         <Form.Group as={Col} controlId="teaTags">
                             <Form.Label>Tags</Form.Label>
                             <Form.Control placeholder="Floral, Astringent, ..." />
                         </Form.Group>
                     </Row>
-                    
-                    <Button variant="primary" type="submit">
-                        Add Tea
-                    </Button>
-                    
                 </Form>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                     Close
+                </Button>
+                <Button variant="primary" type="submit">
+                    Add Tea
                 </Button>
             </Modal.Footer>
         </Modal>
