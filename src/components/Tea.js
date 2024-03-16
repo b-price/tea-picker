@@ -2,6 +2,7 @@ import { ListGroup, Button, Modal } from 'react-bootstrap'
 import TeaStat from './TeaStat'
 import { useState } from 'react'
 import DeleteConfirm from './DeleteConfirm'
+import EditDeleteButtons from './EditDeleteButtons'
 
 export default function Tea({buttons = true}){
     
@@ -20,30 +21,7 @@ export default function Tea({buttons = true}){
                 
             </ListGroup>
             
-            <Buttons showButtons={buttons} />
+            <EditDeleteButtons showButtons={buttons} label="Tea" />
         </>
     )
-}
-
-function Buttons({showButtons}){
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-    
-    function openDeleteConfirmModal() {
-        setShowDeleteConfirm(true)
-    }
-    if (showButtons){
-        
-        return (
-            <>
-                <Button variant="outline-secondary" size="sm" className="m-2 me-auto">
-                    Edit Tea
-                </Button>
-                <Button variant="outline-danger" size="sm" className="m-2 me-auto" onClick={() => openDeleteConfirmModal()}>
-                    Delete Tea
-                </Button>
-                <DeleteConfirm show={showDeleteConfirm} handleClose={() => setShowDeleteConfirm(false)} />
-            </>
-        )
-    }
-
 }

@@ -1,5 +1,6 @@
 import { ListGroup, Button } from "react-bootstrap"
 import TeaStat from './TeaStat'
+import EditDeleteButtons from "./EditDeleteButtons"
 
 export default function Session({buttons = true}){
     return (
@@ -14,19 +15,7 @@ export default function Session({buttons = true}){
                 <TeaStat category={"Amount"} data={"3.5g"}/>
                 
             </ListGroup>
-            <Buttons showButtons={buttons} />
+            <EditDeleteButtons showButtons={buttons} label="Session" />
         </>
     )
-}
-
-function Buttons({showButtons}){
-    if (showButtons){
-        return (
-            <>
-                <Button variant="outline-secondary" size="sm" className="m-2 me-auto">Edit Tea</Button>
-                <Button variant="outline-danger" size="sm" className="m-2 me-auto">Delete Tea</Button>
-            </>
-        )
-    }
-
 }

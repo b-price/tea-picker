@@ -1,7 +1,8 @@
 import { ListGroup, Button } from "react-bootstrap"
 import TeaStat from './TeaStat'
+import EditDeleteButtons from "./EditDeleteButtons"
 
-export default function Vessel(){
+export default function Vessel({buttons = true}){
     return (
         <>
             <ListGroup horizontal={"lg"}>
@@ -11,8 +12,7 @@ export default function Vessel(){
                 <TeaStat category={"Vendor"} data={"Floating Leaves"}/>
                 
             </ListGroup>
-            <Button variant="outline-secondary" size="sm" className="m-2 me-auto">Edit Vessel</Button>
-            <Button variant="outline-danger" size="sm" className="m-2 me-auto">Delete Vessel</Button>
+            <EditDeleteButtons showButtons={buttons} label="Vessel" />
         </>
     )
 }
