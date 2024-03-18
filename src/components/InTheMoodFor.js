@@ -59,15 +59,14 @@ export default function InTheMoodFor({show, handleClose, openTeaPickedModal}) {
                         <Form.Label>Rating</Form.Label>
                         <Form.Range />
                     </Form.Group>
-                    <Button variant="primary" type="submit" onClick={() => openTeaPickedModal()}>
-                        Pick Tea!
-                    </Button>
-                    
                 </Form>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                     Close
+                </Button>
+                <Button variant="primary" onClick={() => openTeaPickedModal()}>
+                    Pick Tea!
                 </Button>
             </Modal.Footer>
         </Modal>

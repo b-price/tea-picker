@@ -1,11 +1,5 @@
 import React, { useState } from 'react'
-import Stack from 'react-bootstrap/Stack'
-import Button from 'react-bootstrap/Button'
-import Container from 'react-bootstrap/Container'
-import ListGroup from 'react-bootstrap/ListGroup'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import { Card } from 'react-bootstrap'
+import { Card, Row, Col, Container, Button, Stack } from 'react-bootstrap'
 import Teas from './Teas' 
 import Sessions from './Sessions'
 import Vessels from './Vessels'
@@ -122,8 +116,8 @@ export default function TeaPicker(){
             <TeaPicked 
                 show={showTeaPicked} 
                 handleClose={() => setShowTeaPicked(false)} 
-                openTeaPickedModal={() => openTeaPickedModal()}
-                openInTheMoodForModal={() => openInTheMoodForModal()}
+                openPickTeaModal={() => openPickTeaModal()}
+                openAddSessionModal={() => openAddSessionModal()}
             />
             <InTheMoodFor 
                 show={showInTheMoodFor}

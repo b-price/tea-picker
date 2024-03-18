@@ -52,16 +52,14 @@ export default function AddSession({show, handleClose, openAddTeaModal}) {
                             <Form.Control placeholder="Less brew time..." />
                         </Form.Group>
                     </Row>
-                    
-                    <Button variant="primary" type="submit">
-                        Add Session
-                    </Button>
-                    
                 </Form>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                     Close
+                </Button>
+                <Button variant="primary">
+                    Add Session
                 </Button>
             </Modal.Footer>
         </Modal>

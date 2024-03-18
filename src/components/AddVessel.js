@@ -49,17 +49,14 @@ export default function AddVessel({show, handleClose}) {
                             <Form.Check id="dark" label="Dark" />
                         </Form.Group>
                     </Row>
-                    
-                    
-                    <Button variant="primary" type="submit">
-                        Add Vessel
-                    </Button>
-                    
                 </Form>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                     Close
+                </Button>
+                <Button variant="primary">
+                    Add Vessel
                 </Button>
             </Modal.Footer>
         </Modal>

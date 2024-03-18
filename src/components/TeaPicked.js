@@ -4,8 +4,8 @@ import Session from "./Session"
 export default function TeaPicked({
     show, 
     handleClose, 
-    openTeaPickedModal, 
-    openInTheMoodForModal}
+    openPickTeaModal, 
+    openAddSessionModal}
 ){
     return (
         <Modal show={show} onHide={handleClose} size="lg">
@@ -16,11 +16,14 @@ export default function TeaPicked({
                 <Session buttons={false}/>
             </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-                Close
-            </Button>
             <Button variant="success">
                 Add to Sessions
+            </Button>
+            <Button variant="outline-primary" onClick={() => openAddSessionModal()}>
+                Edit
+            </Button>
+            <Button variant="outline-primary" onClick={handleClose}>
+                Try Again
             </Button>
             </Modal.Footer>
         </Modal>

@@ -76,7 +76,7 @@ export default function AddTea({show, handleClose}) {
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" type="submit">
+                <Button variant="primary">
                     Add Tea
                 </Button>
             </Modal.Footer>
