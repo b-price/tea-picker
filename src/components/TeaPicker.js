@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Card, Row, Col, Container, Button, Stack } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 import Teas from './Teas' 
 import Sessions from './Sessions'
 import Vessels from './Vessels'
@@ -22,6 +23,11 @@ export default function TeaPicker(){
     const [showAddSession, setShowAddSession] = useState(false)
     const [showTeaPicked, setShowTeaPicked] = useState(false)
     const [showInTheMoodFor, setShowInTheMoodFor] = useState(false)
+    const navigate = useNavigate()
+
+    function handlePage(path) {
+        navigate(path)
+    }
     
     function openTeasModal() {
         setShowTeas(true)
@@ -50,6 +56,8 @@ export default function TeaPicker(){
     function openInTheMoodForModal() {
         setShowInTheMoodFor(true)
     }
+    
+    
 
     return (
         <>
@@ -62,13 +70,13 @@ export default function TeaPicker(){
                     </Col>
                     <Col xs lg="2">
                         <Stack gap="2">
-                            <Button variant="outline-primary" onClick={() => openTeasModal()}>
+                            <Button variant="outline-primary" onClick={() => handlePage("/teas")}>
                                 Teas
                             </Button>
-                            <Button variant="outline-primary" onClick={() => openVesselsModal()}>
+                            <Button variant="outline-primary" onClick={() => handlePage("/vessels")}>
                                 Vessels
                             </Button>
-                            <Button variant="outline-primary" onClick={() => openSessionsModal()}>
+                            <Button variant="outline-primary" onClick={() => handlePage("/sessions")}>
                                 Sessions
                             </Button>
                         </Stack>
@@ -85,21 +93,21 @@ export default function TeaPicker(){
                 </Row>
                 
             </Container>
-            <Teas 
+            {/* <Teas 
                 show={showTeas} 
                 handleClose={() => setShowTeas(false)} 
                 openAddTeaModal={() => openAddTeaModal()}
-            />
-            <Vessels 
+            /> */}
+            {/* <Vessels 
                 show={showVessels} 
                 handleClose={() => setShowVessels(false)}
                 openAddVesselModal={() => openAddVesselModal()} 
-            />
-            <Sessions 
+            /> */}
+            {/* <Sessions 
                 show={showSessions} 
                 handleClose={() => setShowSessions(false)} 
                 openAddSessionModal={() => openAddSessionModal()}
-            />
+            /> */}
             <PickTea 
                 show={showPickTea} 
                 handleClose={() => setShowPickTea(false)} 

@@ -1,32 +1,54 @@
-import { Modal, Button } from 'react-bootstrap'
+import { useState } from 'react'
+import { Card, Button } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
+import AddSession from './AddSession'
+import AddTea from './AddTea'
 import Session from './Session'
 
-export default function Sessions({
-    show, 
-    handleClose, 
-    openAddSessionModal
-}){
+export default function Sessions(){
+    const [showAddTea, setShowAddTea] = useState(false)
+    const navigate = useNavigate()
+    function openAddTeaModal() {
+        setShowAddTea(true)
+    }
+    const [showAddSession, setShowAddSession] = useState(false)
+    function openAddSessionModal() {
+        setShowAddSession(true)
+    }
+    function handlePage(path) {
+        navigate(path)
+    }
     return(
         <>
-            <Modal show={show} onHide={handleClose} size="lg">
-                <Modal.Header closeButton>
-                <Modal.Title>Sessions</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Session />
-                    <Session />
-                    <Session />
-                    <Session />
-                </Modal.Body>
-                <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Close
-                </Button>
+            <Card>
+                <Card.Header as="h2">
+                    Sessions
+                    <Button variant="outline-primary" onClick={() => handlePage("/teas")} className="me-2 float-end">
+                        Teas
+                    </Button>
+                    <Button variant="outline-primary" onClick={() => handlePage("/vessels")} className="me-2 float-end">
+                        Vessels
+                    </Button>
+                    <Button variant="outline-primary" onClick={() => handlePage("/")} className="me-2 float-end">
+                        Home
+                    </Button>
+                </Card.Header>
+                <Card.Body>
+                    <div style={{ maxHeight: "500px", overflowY: "auto" }}>
+                        <Session />
+                        <Session />
+                        <Session />
+                        <Session />
+                    </div>
+                </Card.Body>
+                <Card.Footer>
                 <Button variant="primary" onClick={() => openAddSessionModal()}>
                     Add Session
                 </Button>
-                </Modal.Footer>
-            </Modal>
+                </Card.Footer>
+            </Card>
+            <AddSession show={showAddSession} handleClose={() => setShowAddSession(false)} openAddTeaModal={() => openAddTeaModal()} />
+            <AddTea show={showAddTea} handleClose={() => setShowAddTea(false)} />
         </>
     )
 }
