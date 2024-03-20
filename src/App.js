@@ -1,7 +1,7 @@
-import logo from './logo.svg';
 import { Container } from 'react-bootstrap';
 import TeaPicker from './components/TeaPicker';
 import Topbar from './components/Topbar'
+// import { TeaProvider } from './contexts/TeaContext';
 
 
 function App() {
@@ -9,7 +9,9 @@ function App() {
     <>
       <Container>
         <Topbar />
-        <TeaPicker />
+        {/* <TeaProvider> */}
+          <TeaPicker />
+        {/* </TeaProvider> */}
       </Container>
       
     </>

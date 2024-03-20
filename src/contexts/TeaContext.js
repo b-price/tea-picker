@@ -1,106 +1,55 @@
-import React, { useContext, useState } from "react"
-import { v4 as uuidV4 } from "uuid"
-import {ref, set, get, update, remove, child} from "firebase/database";
+import router from "../server/routes/record";
+import React, {useContext} from "react";
 
 const TeaContext = React.createContext()
+const QUANTITY_RATING_COEFF = 17
+const COST_COEFF = 75
 
-export const UNCATEGORIZED_BUDGET_ID = "Uncategorized"
-
-// budgets: id, name, and max
-// expense: id, budgetId, desc, and amount
-// income : desc and amount
-
-// allows to use the context
-// BudgetApp/App has access to everything in budgets context
 export function useTea() {
-  return useContext(TeaContext)
+    return useContext(TeaContext)
 }
 
 export const TeaProvider = ({ children }) => {
-  // setBudgets allows to update budget values
-  const [vessels, setVessels] = useLocalStorage("budgets", [])
-  // setExpenses allows to update the expenses
-  const [teas, setTeas] = useLocalStorage("expenses", [])
-  // setIncome allows to update the income values
-  const [sessions, setSessions] = useLocalStorage("income", [])
 
-  function getBudgetExpenses(budgetId) {
-    return expenses.filter(expense => expense.budgetId === budgetId)
-  }
+    function getTeas() {
+        return router.get()
+    }
 
-  // function to add expense
-  function addExpense({ description, amount, budgetId }) { // pass in the desc, amount, and the budgetId
-    setExpenses(prevExpenses => { // add the expense to the past expenses
-      // do not need to check for duplicate names since we can have expenses with the same desc
-      return [...prevExpenses, { id: uuidV4(), description, amount, budgetId }]
-    })
-  }
+    function getTeaByID(id) {
+        return router.get(id)
+    }
 
-  // allows user to add income
-  function addIncome({ description, amount }) {
-    setIncome(prevIncome => {
-      return [...prevIncome, { id: uuidV4(), description, amount }]
-    })
-  }
+    function addTea(tea) {
+        router.post(tea)
+    }
 
-  // function to add a budget
-  function addBudget({ name, max }) { // pass in a name and a max for the budget
-    setBudgets(prevBudgets => { // make sure to account for previous budgets
-      // check to see if the budget already exitsts
-      if (prevBudgets.find(budget => budget.name === name)) {
-        return prevBudgets // return the current budgets if any of the names are the same
-      }
-      return [...prevBudgets, { id: uuidV4(), name, max }]
-    })
-  }
+    function editTea(id, attributes){
+        router.patch(id, attributes)
+    }
 
-  // function to delete the budget
-  function deleteBudget({ id }) {
-    // get rid of the budget with the passed in it
-    setExpenses(prevExpenses => {
-      return prevExpenses.map(expense => {
-        if (expense.budgetId !== id) return expense
-        return { ...expense, budgetId: UNCATEGORIZED_BUDGET_ID }
-        // need to account for the uncategorized budget category
-      })
-    })
+    function pickTea(){
+        let teas = getTeas()
+        const cumulativeWeights = []
+        for (var i = 0; i < teas.length; i++){
+            cumulativeWeights[i] = getPickWeight(teas[i].quantity, teas[i].rating, teas[i].cost) + (cumulativeWeights[i - 1] || 0)
+        }
+        const maxCumulativeWeight = cumulativeWeights[cumulativeWeights.length - 1]
+        const randomNumber = maxCumulativeWeight * Math.random()
+        for (let itemIndex = 0; itemIndex < teas.length; itemIndex += 1) {
+            if (cumulativeWeights[itemIndex] >= randomNumber) {
+              return {
+                tea: teas[itemIndex],
+                index: itemIndex,
+              }
+            }
+        }
+    }
 
-    setBudgets(prevBudgets => {
-      return prevBudgets.filter(budget => budget.id !== id)
-    })
-  }
+    function getPickWeight(quantity, rating, cost){
+        return Math.sqrt((QUANTITY_RATING_COEFF * quantity * rating)/(Math.pow(cost, 2) * COST_COEFF))
+    }
 
-  // function to delete an expense
-  function deleteExpense({ id }) {
-    setExpenses(prevExpenses => {
-      return prevExpenses.filter(expense => expense.id !== id)
-    })
-  }
-  function deleteIncome({ id }) {
-    setIncome(prevIncome => {
-      return prevIncome.filter(income => income.id !== id)
-    })
-  }
+    
 
-  // entire application is wrapped in BudgetsProvider
-  return (
-    <BudgetsContext.Provider
-      value={{
-        // what is passes down
-        budgets,
-        expenses,
-        income,
-        // fucntions
-        getBudgetExpenses,
-        addExpense,
-        addIncome,
-        addBudget,
-        deleteBudget,
-        deleteExpense,
-        deleteIncome
-      }}
-    >
-      {children}
-    </BudgetsContext.Provider>
-  )
 }
+
