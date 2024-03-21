@@ -9,11 +9,13 @@ export default function Topbar() {
     <>
       <Navbar>
         <Container>
-          <Nav className="me-auto">
-            <img src={logo} alt="logo" width={50} height={50}/>
-            <h1 className="mx-3">Tea Picker</h1>
-            <img src={settings} alt="settings" width={40} height={40} className="mx-1"/>
-          </Nav>
+            <Nav>
+              <img src={logo} alt="logo" width={50} height={50} className="mb-2 me-3" />
+              <h1 className="m-0 mt-1">Tea Picker</h1>
+            </Nav>
+            
+            <img src={settings} alt="settings" width={45} height={45}  />
+          
         </Container>
       </Navbar>
     </>

@@ -18,18 +18,25 @@ export default function Sessions(){
     function handlePage(path) {
         navigate(path)
     }
+    var mobile = window.matchMedia("(max-width: 420px)").matches
+    console.log(mobile)
     return(
         <>
             <Card>
                 <Card.Header as="h2">
                     Sessions
-                    <Button variant="outline-primary" onClick={() => handlePage("/teas")} className="me-2 float-end">
+                    <Button 
+                        variant="outline-primary" 
+                        onClick={() => handlePage("/teas")} 
+                        className="me-2 float-end"
+                        size={mobile? "sm" : undefined}
+                    >
                         Teas
                     </Button>
-                    <Button variant="outline-primary" onClick={() => handlePage("/vessels")} className="me-2 float-end">
+                    <Button variant="outline-primary" onClick={() => handlePage("/vessels")} className="me-2 float-end" size="sm">
                         Vessels
                     </Button>
-                    <Button variant="outline-primary" onClick={() => handlePage("/")} className="me-2 float-end">
+                    <Button variant="outline-primary" onClick={() => handlePage("/")} className="me-2 float-end" size="sm">
                         Home
                     </Button>
                 </Card.Header>

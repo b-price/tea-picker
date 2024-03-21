@@ -30,7 +30,7 @@ export default function Teas(){
                     </Button>
                 </Card.Header>
                 <Card.Body>
-                    <div style={{ maxHeight: "500px", overflowY: "auto" }}>
+                    <div style={{ maxHeight: "60vh", overflowY: "auto" }}>
                         <Tea />
                         <Tea />
                         <Tea />
