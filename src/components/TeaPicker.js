@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import { Card, Row, Col, Container, Button, Stack } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import Teas from './Teas' 
-import Sessions from './Sessions'
-import Vessels from './Vessels'
 import PickTea from './PickTea'
 import Session from './Session'
 import AddTea from './AddTea'
@@ -12,11 +9,7 @@ import AddSession from './AddSession'
 import TeaPicked from './TeaPicked'
 import InTheMoodFor from './InTheMoodFor'
 
-
 export default function TeaPicker(){
-    const [showTeas, setShowTeas] = useState(false)
-    const [showVessels, setShowVessels] = useState(false)
-    const [showSessions, setShowSessions] = useState(false)
     const [showPickTea, setShowPickTea] = useState(false)
     const [showAddTea, setShowAddTea] = useState(false)
     const [showAddVessel, setShowAddVessel] = useState(false)
@@ -27,16 +20,6 @@ export default function TeaPicker(){
 
     function handlePage(path) {
         navigate(path)
-    }
-    
-    function openTeasModal() {
-        setShowTeas(true)
-    }
-    function openVesselsModal() {
-        setShowVessels(true)
-    }
-    function openSessionsModal() {
-        setShowSessions(true)
     }
     function openPickTeaModal() {
         setShowPickTea(true)
@@ -57,14 +40,12 @@ export default function TeaPicker(){
         setShowInTheMoodFor(true)
     }
     
-    
-
     return (
         <>
             <Container>
-                <Row xs={2} md={4} lg={6}>
-                    <Col>
-                        <Button variant="primary" size="lg" onClick={() => openPickTeaModal()}>
+                <Row xs={2} md={4} lg={8}>
+                    <Col className="align-self-center text-center">
+                        <Button variant="primary" size="lg" onClick={() => openPickTeaModal()} className="alig">
                             Pick Tea
                         </Button>
                     </Col>
@@ -93,21 +74,6 @@ export default function TeaPicker(){
                 </Row>
                 
             </Container>
-            {/* <Teas 
-                show={showTeas} 
-                handleClose={() => setShowTeas(false)} 
-                openAddTeaModal={() => openAddTeaModal()}
-            /> */}
-            {/* <Vessels 
-                show={showVessels} 
-                handleClose={() => setShowVessels(false)}
-                openAddVesselModal={() => openAddVesselModal()} 
-            /> */}
-            {/* <Sessions 
-                show={showSessions} 
-                handleClose={() => setShowSessions(false)} 
-                openAddSessionModal={() => openAddSessionModal()}
-            /> */}
             <PickTea 
                 show={showPickTea} 
                 handleClose={() => setShowPickTea(false)} 
