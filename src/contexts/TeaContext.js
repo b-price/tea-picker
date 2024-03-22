@@ -1,4 +1,4 @@
-import router from "../server/routes/record";
+import router from "../server/routes/record.js";
 import React, {useContext} from "react";
 
 const TeaContext = React.createContext()

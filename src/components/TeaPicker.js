@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { Card, Row, Col, Container, Button, Stack } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import PickTea from './PickTea'
-import Session from './Session'
-import AddTea from './AddTea'
-import AddVessel from './AddVessel'
-import AddSession from './AddSession'
-import TeaPicked from './TeaPicked'
-import InTheMoodFor from './InTheMoodFor'
+import PickTea from './PickTea.js'
+import Session from './Session.js'
+import AddTea from './AddTea.js'
+import AddVessel from './AddVessel.js'
+import AddSession from './AddSession.js'
+import TeaPicked from './TeaPicked.js'
+import InTheMoodFor from './InTheMoodFor.js'
 
 export default function TeaPicker(){
     const [showPickTea, setShowPickTea] = useState(false)

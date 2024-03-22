@@ -1,8 +1,8 @@
 import { ListGroup, Button, Modal } from 'react-bootstrap'
-import TeaStat from './TeaStat'
+import TeaStat from './TeaStat.js'
 import { useState } from 'react'
-import DeleteConfirm from './DeleteConfirm'
-import EditDeleteButtons from './EditDeleteButtons'
+import DeleteConfirm from './DeleteConfirm.js'
+import EditDeleteButtons from './EditDeleteButtons.js'
 
 export default function Tea({buttons = true}){
     

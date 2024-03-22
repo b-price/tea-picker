@@ -1,6 +1,6 @@
 import { ListGroup, Button } from "react-bootstrap"
-import TeaStat from './TeaStat'
-import EditDeleteButtons from "./EditDeleteButtons"
+import TeaStat from './TeaStat.js'
+import EditDeleteButtons from "./EditDeleteButtons.js"
 
 export default function Vessel({buttons = true}){
     return (

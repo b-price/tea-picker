@@ -1,5 +1,5 @@
 import { Modal, Button } from "react-bootstrap"
-import Session from "./Session"
+import Session from "./Session.js"
 
 export default function TeaPicked({
     show, 

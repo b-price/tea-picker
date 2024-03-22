@@ -1,5 +1,5 @@
-import { Button, Modal, Form, Row, Col, InputGroup } from "react-bootstrap";
-import VesselInputForm from "./VesselInputForm";
+import { Button, Modal } from "react-bootstrap";
+import VesselInputForm from "./VesselInputForm.js";
 
 export default function AddVessel({show, handleClose}) {
 

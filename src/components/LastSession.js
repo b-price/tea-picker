@@ -1,6 +1,6 @@
 import Table from 'react-bootstrap/Table';
 import { Button, ListGroup, Card, ListGroupItem } from 'react-bootstrap';
-import TeaStat from './TeaStat'
+import TeaStat from './TeaStat.js'
 
 export default function LastSession() {
   return (

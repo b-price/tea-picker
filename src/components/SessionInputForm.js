@@ -17,7 +17,6 @@ export default function SessionInputForm({
             <Form.Group as={Col} controlId="sessionDate">
                 <Form.Label>Date</Form.Label>
                 <Form.Control required placeholder={date} defaultValue={isEdit? date: null} >
-                    {/* <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} /> */}
                 </Form.Control>
             </Form.Group>
             <Form.Group as={Col} controlId="sessionTea">
@@ -29,7 +28,7 @@ export default function SessionInputForm({
                 </Form.Select>
             </Form.Group>
         </Row>
-        <Row className="mb-3">
+        <Row className="align-items-end mb-3">
             <Form.Group as={Col} controlId="sessionVessel">
                 <Form.Label>Vessel</Form.Label>
                 <Form.Select required defaultValue={vessel}>
@@ -38,11 +37,11 @@ export default function SessionInputForm({
                     <option>Large Gaiwan</option>
                 </Form.Select>
             </Form.Group>
-            <Col className="align-self-center">
-                <Button variant="outline-primary" onClick={() => openAddVesselModal()} className="m-1">
+            <Col>
+                <Button variant="outline-primary" onClick={() => openAddVesselModal()} className="mx-1 my-1 my-sm-0">
                     New Vessel
                 </Button>
-                <Button variant="outline-primary" onClick={() => openAddTeaModal()} className="m-1">
+                <Button variant="outline-primary" onClick={() => openAddTeaModal()} className="mx-1 my-1 my-sm-0">
                     New Tea
                 </Button>
             </Col>

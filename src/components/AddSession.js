@@ -1,7 +1,7 @@
 import { Button, Modal, Form, Row, Col, InputGroup } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import { useState } from "react";
-import SessionInputForm from "./SessionInputForm";
+import SessionInputForm from "./SessionInputForm.js";
 
 export default function AddSession({show, handleClose, openAddTeaModal, openAddVesselModal}) {
     const [startDate, setStartDate] = useState(new Date())

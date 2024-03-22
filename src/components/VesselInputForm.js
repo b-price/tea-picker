@@ -16,6 +16,19 @@ export default function VesselInputForm({
         dark:false,
         tisane:false
     },
+    preferred={
+        green:false,
+        white:false,
+        oolong:false,
+        yellow:false,
+        black:false,
+        sheng:false,
+        shou:false,
+        dark:false,
+        tisane:false
+    },
+    favorite=false,
+    exclude=false,
     isEdit=false
 }) {
 
@@ -50,17 +63,37 @@ export default function VesselInputForm({
             </Form.Group>
         </Row>
         <Row className="mb-3">
-            <Form.Group controlId="vesselIllegal">
+            <Form.Group as={Col} controlId="vesselFavorite">
+                <Form.Check id="favorite" label="Favorite Vessel" checked={isEdit? favorite: undefined} />
+            </Form.Group>
+            <Form.Group as={Col} controlId="vesselExclude">
+                <Form.Check id="exclude" label="Exclude Vessel" checked={isEdit? exclude: undefined} />
+            </Form.Group>
+        </Row>
+        <Row className="mb-3">
+            <Form.Group as={Col} controlId="vesselIllegal">
                 <Form.Label>Disallowed Types</Form.Label>
-                <Form.Check id="white" label="White" checked={isEdit? illegal.white: false} />
-                <Form.Check id="green" label="Green" checked={isEdit? illegal.green: false} />
-                <Form.Check id="oolong" label="Oolong" checked={isEdit? illegal.oolong: false} />
-                <Form.Check id="black" label="Black" checked={isEdit? illegal.black: false} />
-                <Form.Check id="yellow" label="Yellow" checked={isEdit? illegal.yellow: false} />
-                <Form.Check id="sheng" label="Sheng Puer" checked={isEdit? illegal.sheng: false} />
-                <Form.Check id="shou" label="Shou Puer" checked={isEdit? illegal.shou: false} />
-                <Form.Check id="dark" label="Dark" checked={isEdit? illegal.dark: false} />
-                <Form.Check id="tisane" label="Tisane" checked={isEdit? illegal.tisane: false} />
+                <Form.Check id="white" label="White" checked={isEdit? illegal.white: undefined} />
+                <Form.Check id="green" label="Green" checked={isEdit? illegal.green: undefined} />
+                <Form.Check id="oolong" label="Oolong" checked={isEdit? illegal.oolong: undefined} />
+                <Form.Check id="black" label="Black" checked={isEdit? illegal.black: undefined} />
+                <Form.Check id="yellow" label="Yellow" checked={isEdit? illegal.yellow: undefined} />
+                <Form.Check id="sheng" label="Sheng Puer" checked={isEdit? illegal.sheng: undefined} />
+                <Form.Check id="shou" label="Shou Puer" checked={isEdit? illegal.shou: undefined} />
+                <Form.Check id="dark" label="Dark" checked={isEdit? illegal.dark: undefined} />
+                <Form.Check id="tisane" label="Tisane" checked={isEdit? illegal.tisane: undefined} />
+            </Form.Group>
+            <Form.Group as={Col} controlId="vesselPreferred">
+                <Form.Label>Preferred Types</Form.Label>
+                <Form.Check id="white" label="White" checked={isEdit? preferred.white: undefined} />
+                <Form.Check id="green" label="Green" checked={isEdit? preferred.green: undefined} />
+                <Form.Check id="oolong" label="Oolong" checked={isEdit? preferred.oolong: undefined} />
+                <Form.Check id="black" label="Black" checked={isEdit? preferred.black: undefined} />
+                <Form.Check id="yellow" label="Yellow" checked={isEdit? preferred.yellow: undefined} />
+                <Form.Check id="sheng" label="Sheng Puer" checked={isEdit? preferred.sheng: undefined} />
+                <Form.Check id="shou" label="Shou Puer" checked={isEdit? preferred.shou: undefined} />
+                <Form.Check id="dark" label="Dark" checked={isEdit? preferred.dark: undefined} />
+                <Form.Check id="tisane" label="Tisane" checked={isEdit? preferred.tisane: undefined} />
             </Form.Group>
         </Row>
     </Form>

@@ -1,5 +1,5 @@
 import { Button, Modal, Form, Row, Col, InputGroup } from "react-bootstrap";
-import TeaInputForm from "./TeaInputForm";
+import TeaInputForm from "./TeaInputForm.js";
 
 export default function AddTea({show, handleClose}) {
 

@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Card, Button } from 'react-bootstrap'
-import AddSession from './AddSession'
-import AddTea from './AddTea'
-import Session from './Session'
-import AddVessel from './AddVessel'
-import NavButtons from './NavButtons'
+import AddSession from './AddSession.js'
+import AddTea from './AddTea.js'
+import Session from './Session.js'
+import AddVessel from './AddVessel.js'
+import NavButtons from './NavButtons.js'
 
 export default function Sessions(){
     const [showAddTea, setShowAddTea] = useState(false)

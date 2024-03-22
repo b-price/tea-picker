@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Card, Button } from 'react-bootstrap'
-import AddVessel from './AddVessel'
-import Vessel from './Vessel'
-import NavButtons from './NavButtons'
+import AddVessel from './AddVessel.js'
+import Vessel from './Vessel.js'
+import NavButtons from './NavButtons.js'
 
 export default function Vessels(){
     const [showAddVessel, setShowAddVessel] = useState(false)

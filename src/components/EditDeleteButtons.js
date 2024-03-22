@@ -1,5 +1,5 @@
 import { Button } from "react-bootstrap"
-import DeleteConfirm from "./DeleteConfirm"
+import DeleteConfirm from "./DeleteConfirm.js"
 import { useState } from "react"
 
 export default function EditDeleteButtons({showButtons, label}){

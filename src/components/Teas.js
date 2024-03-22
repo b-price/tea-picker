@@ -1,7 +1,7 @@
 import { Button, Card } from 'react-bootstrap'
-import Tea from './Tea'
-import AddTea from './AddTea'
-import NavButtons from './NavButtons'
+import Tea from './Tea.js'
+import AddTea from './AddTea.js'
+import NavButtons from './NavButtons.js'
 import { useState } from 'react'
 
 export default function Teas(){
