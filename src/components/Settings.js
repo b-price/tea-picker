@@ -9,6 +9,12 @@ function openAreYouSure() {
     setShowAreYouSure(true)
 }
 
+const [isDark, setIsDark] = useState(false)
+const setTheme = isDark => {
+    var theme = isDark? "dark" : "light"
+    document.documentElement.setAttribute('data-bs-theme', theme)
+}
+
 function AreYouSure({openAreYouSure, onClose}) {
     return(
         <Modal show={openAreYouSure} onHide={onClose} >
@@ -50,7 +56,15 @@ function AreYouSure({openAreYouSure, onClose}) {
                     </Card.Body>
                     <Card.Header as="h5">Account Settings</Card.Header>
                     <Card.Body>
-                        <Form.Check id="modeSwitch" type="switch" label="Dark mode" className="mb-3"/>
+                        
+                        <Form.Check 
+                            id="modeSwitch" 
+                            type="switch" 
+                            label="Dark mode" 
+                            className="mb-3"
+                            
+                        />
+                        
                         <Form>
                             <Row className="align-items-end mb-4">
                                 <Form.Group as={Col} controlId="updateEmail" className="col-7 col-sm-6">
