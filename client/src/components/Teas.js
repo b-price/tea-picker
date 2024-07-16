@@ -28,6 +28,7 @@ export default function Teas(){
                 id={tea._id}
                 key={tea._id}
                 deleteTea={deleteTea}
+                editTea={editTea}
                 buttons={true}
             />
         )

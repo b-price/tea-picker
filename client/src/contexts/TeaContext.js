@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, {useContext, useState, useEffect} from "react";
+import React, {useContext, useEffect, useState} from "react";
 
 const userid = "666cccp"
 const serverRoot = 'http://localhost:5050';
@@ -30,18 +30,22 @@ export const TeaProvider = ({ children }) => {
         })
     }, [])
 
+    function getTea(id){
+        return teas.find(tea => tea._id === id)
+    }
+
     function addTea(tea) {
         axios.post(`${serverRoot}/teas/`, {
             user_id: userid,
             name: tea.name,
             type: tea.type,
-            quantity: tea.quantity,
+            quantity: +tea.quantity,
             vendor: tea.vendor,
-            cost: tea.cost,
-            year: tea.year,
-            rating: tea.rating,
-            ratio: tea.ratio,
-            tags: tea.tags,
+            cost: +tea.cost,
+            year: +tea.year,
+            rating: +tea.rating,
+            ratio: +tea.ratio,
+            tags: tea.tags.split(","),
         }).then(response => {
             console.log(response)
         }).catch(error => {
@@ -49,17 +53,17 @@ export const TeaProvider = ({ children }) => {
         })
     }
 
-    function editTea(id, attributes){
+    function editTea(attributes, id){
         axios.patch(`${serverRoot}/teas/${id}`, {
             name: attributes.name,
             type: attributes.type,
-            quantity: attributes.quantity,
+            quantity: +attributes.quantity,
             vendor: attributes.vendor,
-            cost: attributes.cost,
-            year: attributes.year,
-            rating: attributes.rating,
-            ratio: attributes.ratio,
-            tags: attributes.tags,
+            cost: +attributes.cost,
+            year: +attributes.year,
+            rating: +attributes.rating,
+            ratio: +attributes.ratio,
+            tags: attributes.tags.split(","),
         }).then(response => {
             console.log(response)
         }).catch(error => {
@@ -101,6 +105,7 @@ export const TeaProvider = ({ children }) => {
     return (
         <TeaContext.Provider value={{
             teas,
+            getTea,
             addTea,
             editTea,
             deleteTea,

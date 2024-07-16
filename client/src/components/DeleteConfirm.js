@@ -26,7 +26,7 @@ export default function DeleteConfirm({show, handleClose, id, deleteFunction}){
                     </Button>
                 </Modal.Body>
                 <Modal.Footer className="d-flex justify-content-around">
-                    <Alert variant={"danger"} show={showAlert} onClose={() => setShowAlert(false)}>
+                    <Alert className={"p-2"} variant={"danger"} show={showAlert} onClose={() => setShowAlert(false)}>
                         Item Deleted!
                     </Alert>
                 </Modal.Footer>

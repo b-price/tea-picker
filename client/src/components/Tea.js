@@ -26,6 +26,8 @@ export default function Tea(props){
                 label="Tea"
                 id={props.id}
                 deleteFunction={props.deleteTea}
+                editFunction={props.editTea}
+                type={"tea"}
             />
         </>
     )

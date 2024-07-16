@@ -1,18 +1,18 @@
 import {Form, Row, Col, InputGroup, Button, Alert} from "react-bootstrap";
 import {useState} from "react";
 
-
-
 export default function TeaInputForm({
-    name="Xiaguan FT #4",
-    type="Sheng Puer",
-    quantity="357",
-    vendor="Yunnan Sourcing",
-    cost="0.5",
-    year="2007",
-    rating="9",
-    ratio="4.5",
-    tags=["Earthy", "Mineral", "Smoky"],
+    currentTea={
+        name: "Xiaguan FT #4",
+        type: "Sheng Puer",
+        quantity: "357",
+        vendor: "Yunnan Sourcing",
+        cost: "0.5",
+        year: "2007",
+        rating: "9",
+        ratio: "4.5",
+        tags: ["Earthy", "Mineral", "Smoky"]
+    },
     isEdit=false,
     submit,
     handleClose
@@ -20,7 +20,15 @@ export default function TeaInputForm({
     const [showErrorAlert, setShowErrorAlert] = useState(false);
     const [showSubmitAlert, setShowSubmitAlert] = useState(false);
     const [form, setForm] = useState({
-        name: name, type: type, quantity: quantity, vendor: vendor, cost: cost, year: year, rating: rating, ratio: ratio, tags: tags
+        name: currentTea.name,
+        type: currentTea.type,
+        quantity: currentTea.quantity,
+        vendor: currentTea.vendor,
+        cost: currentTea.cost,
+        year: currentTea.year,
+        rating: currentTea.rating,
+        ratio: currentTea.ratio,
+        tags: currentTea.tags
     })
     const handleChange = (event) => {
         setForm({
@@ -32,7 +40,7 @@ export default function TeaInputForm({
     function onSubmit(event) {
         event.preventDefault()
         try {
-            submit(form)
+            submit(form, currentTea._id)
             setShowSubmitAlert(true)
             setTimeout(() => {
                 setShowSubmitAlert(false)
@@ -56,8 +64,8 @@ export default function TeaInputForm({
                         required
                         id="name"
                         onChange={handleChange}
-                        placeholder={name}
-                        defaultValue={isEdit? name: null}
+                        placeholder={form.name}
+                        value={isEdit? form.name: null}
                     />
                 </Form.Group>
                 <Form.Group as={Col}>
@@ -66,7 +74,7 @@ export default function TeaInputForm({
                         required
                         id={"type"}
                         onChange={handleChange}
-                        defaultValue={type}
+                        defaultValue={form.type}
                     >
                         <option>Sheng Puer</option>
                         <option>White</option>
@@ -82,8 +90,8 @@ export default function TeaInputForm({
                             required
                             id={"quantity"}
                             onChange={handleChange}
-                            placeholder={quantity}
-                            defaultValue={isEdit? quantity: null}
+                            placeholder={form.quantity}
+                            defaultValue={isEdit? form.quantity: null}
                         />
                         <InputGroup.Text>grams</InputGroup.Text>
                     </InputGroup>
@@ -93,8 +101,8 @@ export default function TeaInputForm({
                     <Form.Control
                         id={"vendor"}
                         onChange={handleChange}
-                        placeholder={vendor}
-                        defaultValue={isEdit? vendor: null}
+                        placeholder={form.vendor}
+                        defaultValue={isEdit? form.vendor: null}
                     />
                 </Form.Group>
             </Row>
@@ -106,8 +114,8 @@ export default function TeaInputForm({
                         <Form.Control
                             id={"cost"}
                             onChange={handleChange}
-                            placeholder={cost}
-                            defaultValue={isEdit? cost: null}
+                            placeholder={form.cost}
+                            defaultValue={isEdit? form.cost: null}
                         />
                         <InputGroup.Text>/ gram</InputGroup.Text>
                     </InputGroup>
@@ -117,8 +125,8 @@ export default function TeaInputForm({
                     <Form.Label>Year</Form.Label>
                     <Form.Control
                         id={"year"}
-                        placeholder={year}
-                        defaultValue={isEdit? year: null}
+                        placeholder={form.year}
+                        defaultValue={isEdit? form.year: null}
                     />
                 </Form.Group>
             </Row>
@@ -128,8 +136,8 @@ export default function TeaInputForm({
                     <Form.Control
                         id={"rating"}
                         onChange={handleChange}
-                        placeholder={rating}
-                        defaultValue={isEdit? rating: null}
+                        placeholder={form.rating}
+                        defaultValue={isEdit? form.rating: null}
                     />
                 </Form.Group>
                 <Form.Group as={Col} >
@@ -138,8 +146,8 @@ export default function TeaInputForm({
                         <Form.Control
                             id={"ratio"}
                             onChange={handleChange}
-                            placeholder={ratio}
-                            defaultValue={isEdit? ratio: null}
+                            placeholder={form.ratio}
+                            defaultValue={isEdit? form.ratio: null}
                         />
                         <InputGroup.Text>g/mL</InputGroup.Text>
                     </InputGroup>
@@ -151,7 +159,8 @@ export default function TeaInputForm({
                     <Form.Control
                         id={"tags"}
                         onChange={handleChange}
-                        placeholder={tags.join(", ")} defaultValue={isEdit? tags.join(", "): null}
+                        placeholder={form.tags.isArray ? form.tags.join(", ") : form.tags}
+                        defaultValue={!isEdit? null: form.tags.isArray ? form.tags.join(", ") : form.tags}
                     />
                 </Form.Group>
             </Row>
