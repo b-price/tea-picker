@@ -1,9 +1,9 @@
 import { Button, Card } from 'react-bootstrap'
 import Tea from './Tea.js'
-import AddTea from './AddTea.js'
 import NavButtons from './NavButtons.js'
 import { useState } from 'react'
 import {useTea} from "../contexts/TeaContext.js";
+import Add from "./Add.js";
 
 export default function Teas(){
     const [showAddTea, setShowAddTea] = useState(false)
@@ -27,7 +27,7 @@ export default function Teas(){
                 ratio={tea.ratio}
                 id={tea._id}
                 key={tea._id}
-                deleteTea={() => deleteTea()}
+                deleteTea={deleteTea}
                 buttons={true}
             />
         )
@@ -55,7 +55,7 @@ export default function Teas(){
                     </Button>
                 </Card.Footer>
             </Card>
-            <AddTea show={showAddTea} handleClose={() => setShowAddTea(false)} add={addTea}/>
+            <Add show={showAddTea} handleClose={() => setShowAddTea(false)} add={addTea} type={"tea"}/>
         </>
     )
 }

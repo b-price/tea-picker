@@ -3,11 +3,9 @@ import { Card, Row, Col, Container, Button, Stack } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import PickTea from './PickTea.js'
 import Session from './Session.js'
-import AddTea from './AddTea.js'
-import AddVessel from './AddVessel.js'
-import AddSession from './AddSession.js'
 import TeaPicked from './TeaPicked.js'
 import InTheMoodFor from './InTheMoodFor.js'
+import Add from "./Add.js";
 
 export default function TeaPicker(){
     const [showPickTea, setShowPickTea] = useState(false)
@@ -80,12 +78,13 @@ export default function TeaPicker(){
                 openTeaPickedModal={() => openTeaPickedModal()}
                 openInTheMoodForModal={() => openInTheMoodForModal()}
             />
-            <AddTea show={showAddTea} handleClose={() => setShowAddTea(false)} />
-            <AddVessel show={showAddVessel} handleClose={() => setShowAddVessel(false)} />
-            <AddSession 
+            <Add show={showAddTea} handleClose={() => setShowAddTea(false)} type={"tea"}/>
+            <Add show={showAddVessel} handleClose={() => setShowAddVessel(false)} type={"vessel"} />
+            <Add
                 show={showAddSession} 
                 handleClose={() => setShowAddSession(false)}
                 openAddTeaModal={() => openAddTeaModal()}
+                type={"session"}
             />
             <TeaPicked 
                 show={showTeaPicked} 

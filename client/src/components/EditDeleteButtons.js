@@ -22,7 +22,7 @@ export default function EditDeleteButtons({showButtons, label, id, deleteFunctio
                     show={showDeleteConfirm}
                     handleClose={() => setShowDeleteConfirm(false)}
                     id={id}
-                    deleteFunction={() => deleteFunction()}
+                    deleteFunction={deleteFunction}
                 />
             </>
         )

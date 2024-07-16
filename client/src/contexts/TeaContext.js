@@ -68,6 +68,7 @@ export const TeaProvider = ({ children }) => {
     }
 
     function deleteTea(id) {
+        console.log(id)
         axios.delete(`${serverRoot}/teas/${id}`)
             .then(response => {
                 console.log(response)

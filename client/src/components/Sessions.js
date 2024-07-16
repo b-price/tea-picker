@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import { Card, Button } from 'react-bootstrap'
-import AddSession from './AddSession.js'
-import AddTea from './AddTea.js'
 import Session from './Session.js'
-import AddVessel from './AddVessel.js'
 import NavButtons from './NavButtons.js'
+import Add from "./Add.js";
 
 export default function Sessions(){
     const [showAddTea, setShowAddTea] = useState(false)
@@ -46,14 +44,15 @@ export default function Sessions(){
                 </Button>
                 </Card.Footer>
             </Card>
-            <AddSession 
+            <Add
                 show={showAddSession} 
                 handleClose={() => setShowAddSession(false)} 
                 openAddTeaModal={() => openAddTeaModal()} 
                 openAddVesselModal={() => openAddVesselModal()}
+                type={"session"}
             />
-            <AddTea show={showAddTea} handleClose={() => setShowAddTea(false)} />
-            <AddVessel show={showAddVessel} handleClose={() => setShowAddVessel(false)} />
+            <Add show={showAddTea} handleClose={() => setShowAddTea(false)} type={"tea"} />
+            <Add show={showAddVessel} handleClose={() => setShowAddVessel(false)} type={"vessel"} />
         </>
     )
 }

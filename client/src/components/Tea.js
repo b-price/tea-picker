@@ -25,7 +25,7 @@ export default function Tea(props){
                 showButtons={props.buttons}
                 label="Tea"
                 id={props.id}
-                deleteFunction={() => props.deleteTea()}
+                deleteFunction={props.deleteTea}
             />
         </>
     )

@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Card, Button } from 'react-bootstrap'
-import AddVessel from './AddVessel.js'
 import Vessel from './Vessel.js'
 import NavButtons from './NavButtons.js'
+import Add from "./Add.js";
 
 export default function Vessels(){
     const [showAddVessel, setShowAddVessel] = useState(false)
@@ -36,7 +36,7 @@ export default function Vessels(){
                 </Button>
                 </Card.Footer>
             </Card>
-            <AddVessel show={showAddVessel} handleClose={() => setShowAddVessel(false)} />
+            <Add show={showAddVessel} handleClose={() => setShowAddVessel(false)} type={"vessel"}/>
         </>
     )
 }
