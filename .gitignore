@@ -5,7 +5,8 @@
 /.pnp
 .pnp.js
 
-/src/server/node_modules
+/server/node_modules
+/client/node_modules
 
 # testing
 /coverage
@@ -29,3 +30,4 @@ yarn-error.log*
 /fav-dark
 /img
 config.env
+.idea

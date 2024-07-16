@@ -1,6 +1,11 @@
 import { Modal, Button } from "react-bootstrap";
 
-export default function DeleteConfirm({show, handleClose}){
+export default function DeleteConfirm({show, handleClose, id, deleteFunction}){
+
+    const onDelete = () => {
+        deleteFunction(id)
+        handleClose()
+    }
     return (
         <Modal show={show} onHide={handleClose} size="sm" centered>
             <Modal.Header closeButton>
@@ -11,7 +16,7 @@ export default function DeleteConfirm({show, handleClose}){
                     <Button variant="secondary" onClick={handleClose}>
                         Cancel
                     </Button>
-                    <Button variant="danger" onClick={handleClose}>
+                    <Button variant="danger" onClick={() => onDelete()}>
                         Delete
                     </Button>
                 

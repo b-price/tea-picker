@@ -2,7 +2,7 @@ import { Button } from "react-bootstrap"
 import DeleteConfirm from "./DeleteConfirm.js"
 import { useState } from "react"
 
-export default function EditDeleteButtons({showButtons, label}){
+export default function EditDeleteButtons({showButtons, label, id, deleteFunction}){
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
     
     function openDeleteConfirmModal() {
@@ -16,9 +16,14 @@ export default function EditDeleteButtons({showButtons, label}){
                     Edit {label}
                 </Button>
                 <Button variant="outline-danger" size="sm" className="m-2 me-auto" onClick={() => openDeleteConfirmModal()}>
-                    Delete {label}
+                    Delete {() => {openDeleteConfirmModal()}}
                 </Button>
-                <DeleteConfirm show={showDeleteConfirm} handleClose={() => setShowDeleteConfirm(false)} />
+                <DeleteConfirm
+                    show={showDeleteConfirm}
+                    handleClose={() => setShowDeleteConfirm(false)}
+                    id={id}
+                    deleteFunction={() => deleteFunction()}
+                />
             </>
         )
     }

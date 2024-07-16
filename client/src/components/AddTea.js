@@ -1,7 +1,7 @@
 import { Button, Modal, Form, Row, Col, InputGroup } from "react-bootstrap";
 import TeaInputForm from "./TeaInputForm.js";
 
-export default function AddTea({show, handleClose}) {
+export default function AddTea({show, handleClose, add}) {
 
     return (
         <Modal show={show} onHide={handleClose}>
@@ -15,7 +15,7 @@ export default function AddTea({show, handleClose}) {
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary">
+                <Button variant="primary" onclick={handleClose}>
                     Add Tea
                 </Button>
             </Modal.Footer>
