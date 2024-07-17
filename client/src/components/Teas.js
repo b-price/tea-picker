@@ -1,7 +1,7 @@
 import { Button, Card } from 'react-bootstrap'
 import Tea from './Tea.js'
 import NavButtons from './NavButtons.js'
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import {useTea} from "../contexts/TeaContext.js";
 import Add from "./Add.js";
 
@@ -14,25 +14,27 @@ export default function Teas(){
     }
 
     let rows = []
-    teas.forEach(tea => {
-        rows.push(
-            <Tea
-                name={tea.name}
-                type={tea.type}
-                vendor={tea.vendor}
-                cost={tea.cost}
-                quantity={tea.quantity}
-                rating={tea.rating}
-                year={tea.year}
-                ratio={tea.ratio}
-                id={tea._id}
-                key={tea._id}
-                deleteTea={deleteTea}
-                editTea={editTea}
-                buttons={true}
-            />
-        )
-    })
+    if (teas) {
+        teas.forEach(tea => {
+            rows.push(
+                <Tea
+                    name={tea.name}
+                    type={tea.type}
+                    vendor={tea.vendor}
+                    cost={tea.cost}
+                    quantity={tea.quantity}
+                    rating={tea.rating}
+                    year={tea.year}
+                    ratio={tea.ratio}
+                    id={tea._id}
+                    key={tea._id}
+                    deleteTea={deleteTea}
+                    editTea={editTea}
+                    buttons={true}
+                />
+            )
+        })
+    }
 
     return(
         <>

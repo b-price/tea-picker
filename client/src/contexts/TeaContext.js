@@ -12,8 +12,8 @@ export function useTea() {
 }
 
 export const TeaProvider = ({ children }) => {
-
     const [teas, setTeas] = useState([])
+
     useEffect(() => {
         axios.get(`${serverRoot}/teas/?user=${userid}`)
             .then((response) => {
@@ -28,13 +28,16 @@ export const TeaProvider = ({ children }) => {
                 console.log("Non-axios error")
             }
         })
-    }, [])
+    }, [teas])
 
     function getTea(id){
         return teas.find(tea => tea._id === id)
     }
 
     function addTea(tea) {
+        if (typeof tea.tags === "string"){
+            tea.tags = tea.tags.split(",")
+        }
         axios.post(`${serverRoot}/teas/`, {
             user_id: userid,
             name: tea.name,
@@ -45,15 +48,20 @@ export const TeaProvider = ({ children }) => {
             year: +tea.year,
             rating: +tea.rating,
             ratio: +tea.ratio,
-            tags: tea.tags.split(","),
+            tags: tea.tags,
         }).then(response => {
             console.log(response)
+            //setTeas(prevTeas => [...prevTeas, tea])
         }).catch(error => {
             console.log(error)
         })
+
     }
 
     function editTea(attributes, id){
+        if (typeof attributes.tags === "string"){
+            attributes.tags = attributes.tags.split(",")
+        }
         axios.patch(`${serverRoot}/teas/${id}`, {
             name: attributes.name,
             type: attributes.type,
@@ -63,27 +71,35 @@ export const TeaProvider = ({ children }) => {
             year: +attributes.year,
             rating: +attributes.rating,
             ratio: +attributes.ratio,
-            tags: attributes.tags.split(","),
+            tags: attributes.tags,
         }).then(response => {
             console.log(response)
+            setTeas(teas.map(tea => {
+                if (tea._id === id){
+                    return attributes
+                } else {
+                    return tea
+                }
+            }))
         }).catch(error => {
             console.log(error)
         })
     }
 
     function deleteTea(id) {
-        console.log(id)
         axios.delete(`${serverRoot}/teas/${id}`)
             .then(response => {
                 console.log(response)
+                //setTeas(teas.filter(tea => tea._id !== id))
             }).catch(error => {
             console.log(error)
         })
+
     }
 
     function pickTea(){
         const cumulativeWeights = []
-        for (var i = 0; i < teas.length; i++){
+        for (let i = 0; i < teas.length; i++){
             cumulativeWeights[i] = getPickWeight(teas[i].quantity, teas[i].rating, teas[i].cost) + (cumulativeWeights[i - 1] || 0)
         }
         const maxCumulativeWeight = cumulativeWeights[cumulativeWeights.length - 1]
