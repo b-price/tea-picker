@@ -1,14 +1,13 @@
-import {Button, Card, Dropdown, DropdownButton} from 'react-bootstrap'
+import {Button, Card, Dropdown} from 'react-bootstrap'
 import Tea from './Tea.js'
 import NavButtons from './NavButtons.js'
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import {useTea} from "../contexts/TeaContext.js";
 import Add from "./Add.js";
 
 export default function Teas(){
     const [showAddTea, setShowAddTea] = useState(false)
     const {teas, addTea, deleteTea, editTea, sortTea} = useTea()
-    const [teaSorted, setTeaSorted] = useState(teas.toReversed())
     function openAddTeaModal() {
         setShowAddTea(true)
     }
@@ -59,6 +58,7 @@ export default function Teas(){
                     <Dropdown className={"float-end"}>
                         <Dropdown.Toggle variant={"outline-primary"}>Sort by...</Dropdown.Toggle>
                         <Dropdown.Menu>
+                            <Dropdown.Item onClick={() => sortTea("date")}>Date Added</Dropdown.Item>
                             <Dropdown.Item onClick={() => sortTea("name")}>Name</Dropdown.Item>
                             <Dropdown.Item onClick={() => sortTea("type")}>Type</Dropdown.Item>
                             <Dropdown.Item onClick={() => sortTea("quantity")}>Quantity</Dropdown.Item>
@@ -66,6 +66,7 @@ export default function Teas(){
                             <Dropdown.Item onClick={() => sortTea("cost")}>Cost</Dropdown.Item>
                             <Dropdown.Item onClick={() => sortTea("rating")}>Rating</Dropdown.Item>
                             <Dropdown.Item onClick={() => sortTea("year")}>Year</Dropdown.Item>
+                            <Dropdown.Item onClick={() => sortTea("ratio")}>Ratio</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                 </Card.Footer>

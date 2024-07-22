@@ -56,7 +56,11 @@ export const TeaProvider = ({ children }) => {
                 case "rating":
                     rawTeas.sort((a, b) => b.rating - a.rating)
                     break
+                case "ratio":
+                    rawTeas.sort((a, b) => a.ratio - b.ratio)
+                    break
                 default:
+                    rawTeas.reverse()
                     break
             }
             return rawTeas
