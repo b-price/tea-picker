@@ -15,11 +15,12 @@ export const TeaProvider = ({ children }) => {
     const [teas, setTeas] = useState([])
     const [teaTypes, setTeaTypes] = useState([])
     const [vendors, setVendors] = useState([])
+    const [sortQuery, setSortQuery] = useState("date")
 
     useEffect(() => {
         axios.get(`${serverRoot}/teas/?user=${userid}`)
             .then((response) => {
-                setTeas(response.data)
+                setTeas(sortTeas(response.data))
                 setTeaTypes([...new Set(teas.map(tea => tea.type))])
                 setVendors([...new Set(teas.map(tea => tea.vendor))])
             }).catch(error => {
@@ -32,7 +33,35 @@ export const TeaProvider = ({ children }) => {
                 console.log("Non-axios error")
             }
         })
-    }, [teas])
+        function sortTeas(rawTeas){
+            switch (sortQuery){
+                case "name":
+                    rawTeas.sort((a, b) => a.name.localeCompare(b.name))
+                    break
+                case "type":
+                    rawTeas.sort((a, b) => a.type.localeCompare(b.type))
+                    break
+                case "quantity":
+                    rawTeas.sort((a, b) => a.quantity - b.quantity)
+                    break
+                case "vendor":
+                    rawTeas.sort((a, b) => a.vendor.localeCompare(b.vendor))
+                    break
+                case "cost":
+                    rawTeas.sort((a, b) => a.cost - b.cost)
+                    break
+                case "year":
+                    rawTeas.sort((a, b) => a.year - b.year)
+                    break
+                case "rating":
+                    rawTeas.sort((a, b) => b.rating - a.rating)
+                    break
+                default:
+                    break
+            }
+            return rawTeas
+        }
+    }, [sortQuery, teas])
 
     function getTea(id){
         return teas.find(tea => tea._id === id)
@@ -98,7 +127,6 @@ export const TeaProvider = ({ children }) => {
             }).catch(error => {
             console.log(error)
         })
-
     }
 
     function pickTea(){
@@ -122,6 +150,10 @@ export const TeaProvider = ({ children }) => {
         return Math.sqrt((QUANTITY_RATING_COEFF * quantity * rating)/(Math.pow(cost, 2) * COST_COEFF))
     }
 
+    function sortTea(attribute){
+        setSortQuery(attribute)
+    }
+
     return (
         <TeaContext.Provider value={{
             teas,
@@ -131,7 +163,8 @@ export const TeaProvider = ({ children }) => {
             addTea,
             editTea,
             deleteTea,
-            pickTea
+            pickTea,
+            sortTea
         }}>{children}</TeaContext.Provider>
     )
 }
