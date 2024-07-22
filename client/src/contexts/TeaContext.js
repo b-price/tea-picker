@@ -13,11 +13,15 @@ export function useTea() {
 
 export const TeaProvider = ({ children }) => {
     const [teas, setTeas] = useState([])
+    const [teaTypes, setTeaTypes] = useState([])
+    const [vendors, setVendors] = useState([])
 
     useEffect(() => {
         axios.get(`${serverRoot}/teas/?user=${userid}`)
             .then((response) => {
                 setTeas(response.data)
+                setTeaTypes([...new Set(teas.map(tea => tea.type))])
+                setVendors([...new Set(teas.map(tea => tea.vendor))])
             }).catch(error => {
             if (error.response) {
                 console.log("Error with response: " + error.response)
@@ -121,6 +125,8 @@ export const TeaProvider = ({ children }) => {
     return (
         <TeaContext.Provider value={{
             teas,
+            teaTypes,
+            vendors,
             getTea,
             addTea,
             editTea,
