@@ -3,16 +3,14 @@ import React, {useContext, useEffect, useState} from "react";
 
 const userid = "666cccp"
 const serverRoot = 'http://localhost:5050';
-const TeaContext = React.createContext()
-const QUANTITY_RATING_COEFF = 17
-const COST_COEFF = 75
+const SessionContext = React.createContext()
 
-export function useTea() {
-    return useContext(TeaContext)
+export function useSession() {
+    return useContext(SessionContext)
 }
 
-export const TeaProvider = ({ children }) => {
-    const [teas, setTeas] = useState([])
+export const SessionProvider = ({ children }) => {
+    const [sessions, setSessions] = useState([])
     const [teaTypes, setTeaTypes] = useState([])
     const [vendors, setVendors] = useState([])
     const [sortQuery, setSortQuery] = useState("date")
@@ -20,9 +18,9 @@ export const TeaProvider = ({ children }) => {
     useEffect(() => {
         axios.get(`${serverRoot}/teas/?user=${userid}`)
             .then((response) => {
-                setTeas(sortTeas(response.data))
-                setTeaTypes([...new Set(teas.map(tea => tea.type))])
-                setVendors([...new Set(teas.map(tea => tea.vendor))])
+                setSessions(sortTeas(response.data))
+                setTeaTypes([...new Set(sessions.map(tea => tea.type))])
+                setVendors([...new Set(sessions.map(tea => tea.vendor))])
             }).catch(error => {
             if (error.response) {
                 console.log("Error with response: " + error.response)
@@ -65,10 +63,10 @@ export const TeaProvider = ({ children }) => {
             }
             return rawTeas
         }
-    }, [sortQuery, teas])
+    }, [sortQuery, sessions])
 
     function getTea(id){
-        return teas.find(tea => tea._id === id)
+        return sessions.find(tea => tea._id === id)
     }
 
     function addTea(tea) {
@@ -111,13 +109,13 @@ export const TeaProvider = ({ children }) => {
             tags: attributes.tags,
         }).then(response => {
             console.log(response)
-            // setTeas(teas.map(tea => {
-            //     if (tea._id === id){
-            //         return attributes
-            //     } else {
-            //         return tea
-            //     }
-            // }))
+            setSessions(sessions.map(tea => {
+                if (tea._id === id){
+                    return attributes
+                } else {
+                    return tea
+                }
+            }))
         }).catch(error => {
             console.log(error)
         })
@@ -133,43 +131,21 @@ export const TeaProvider = ({ children }) => {
         })
     }
 
-    function pickTea(){
-        const cumulativeWeights = []
-        for (let i = 0; i < teas.length; i++){
-            cumulativeWeights[i] = getPickWeight(teas[i].quantity, teas[i].rating, teas[i].cost) + (cumulativeWeights[i - 1] || 0)
-        }
-        const maxCumulativeWeight = cumulativeWeights[cumulativeWeights.length - 1]
-        const randomNumber = maxCumulativeWeight * Math.random()
-        for (let itemIndex = 0; itemIndex < teas.length; itemIndex += 1) {
-            if (cumulativeWeights[itemIndex] >= randomNumber) {
-              return {
-                tea: teas[itemIndex],
-                index: itemIndex,
-              }
-            }
-        }
-    }
-
-    function getPickWeight(quantity, rating, cost){
-        return Math.sqrt((QUANTITY_RATING_COEFF * quantity * rating)/(Math.pow(cost, 2) * COST_COEFF))
-    }
-
     function sortTea(attribute){
         setSortQuery(attribute)
     }
 
     return (
-        <TeaContext.Provider value={{
-            teas,
+        <SessionContext.Provider value={{
+            teas: sessions,
             teaTypes,
             vendors,
             getTea,
             addTea,
             editTea,
             deleteTea,
-            pickTea,
             sortTea
-        }}>{children}</TeaContext.Provider>
+        }}>{children}</SessionContext.Provider>
     )
 }
 

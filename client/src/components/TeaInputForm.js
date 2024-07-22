@@ -58,7 +58,6 @@ export default function TeaInputForm({
         })
     }
     const handleNewType = () => {
-        console.log(teaTypes[0])
         setNewType(!newType)
     }
     const handleNewVendor = () => {
@@ -115,7 +114,7 @@ export default function TeaInputForm({
                                     id={"type"}
                                     onChange={handleChange}
                                     defaultValue={form.type}
-                                    isInvalid={form.type === undefined || form.name === ""}
+                                    isInvalid={form.type === undefined || form.type === ""}
                                 />
                                 <Form.Control.Feedback type="invalid">Type is required.</Form.Control.Feedback>
                             </>

@@ -1,101 +1,279 @@
-import { Form, Row, Col, InputGroup } from "react-bootstrap"
+import {Form, Row, Col, InputGroup, Button, Alert} from "react-bootstrap"
+import {useVessels} from "../contexts/VesselContext.js";
+import {useState} from "react";
+import {useTea} from "../contexts/TeaContext.js";
 
 export default function VesselInputForm({
-    name="Small Gaiwan",
-    type="Gaiwan",
-    capacity="100",
-    vendor="Bitterleaf",
-    illegal={
-        green:false,
-        white:false,
-        oolong:false,
-        yellow:false,
-        black:false,
-        sheng:false,
-        shou:false,
-        dark:false,
-        tisane:false
+    currentVessel ={
+        name:"",
+        type:"",
+        capacity:0,
+        vendor:"",
+        illegal:[],
+        preferred:[],
+        favorite:false,
+        exclude:false
     },
-    preferred={
-        green:false,
-        white:false,
-        oolong:false,
-        yellow:false,
-        black:false,
-        sheng:false,
-        shou:false,
-        dark:false,
-        tisane:false
-    },
-    favorite=false,
-    exclude=false,
-    isEdit=false
+    isEdit=false,
+    submit,
+    handleClose
 }) {
+    const {vendors, vesselTypes} = useVessels()
+    const {teaTypes} = useTea()
+    let vesselSelect = []
+    let vendorSelect = []
+    let teaSelect = []
+    if (vesselTypes){
+        vesselTypes.forEach((type, index) => {
+            vesselSelect.push(
+                <option value={type}>{type}</option>
+            )
+        })
+    }
+    if (vendors){
+        vendors.forEach((vendor, index) => {
+            vendorSelect.push(
+                <option value={vendor}>{vendor}</option>
+            )
+        })
+    }
+    if (teaTypes){
+        teaTypes.forEach((type, index) => {
+            teaSelect.push(
+                <option value={type}>{type}</option>
+            )
+        })
+    }
 
+    const [showErrorAlert, setShowErrorAlert] = useState(false);
+    const [showSubmitAlert, setShowSubmitAlert] = useState(false);
+    const [newType, setNewType] = useState(false);
+    const [newVendor, setNewVendor] = useState(false);
+
+    const [form, setForm] = useState({
+        name: currentVessel.name,
+        type: !isEdit? vesselTypes[0]: currentVessel.type,
+        capacity: currentVessel.capacity,
+        vendor: !isEdit? vendors[0]: currentVessel.vendor,
+        favorite: currentVessel.favorite,
+        exclude: currentVessel.exclude,
+        disallowed: currentVessel.disallowed,
+        preferred: currentVessel.preferred,
+    })
+
+    const [validated, setValidated] = useState(false);
+    const handleChange = (event) => {
+        console.log(event.target.value);
+        setForm({
+            ...form,
+            [event.target.id]: event.target.value,
+        })
+    }
+    const handleSwitch = (event) => {
+        let value = event.target.checked
+        setForm({
+            ...form,
+            [event.target.id]: value,
+        })
+    }
+    const handleMultiSelect = (event) => {
+        let value = Array.from(event.target.selectedOptions, option => option.value)
+        setForm({
+            ...form,
+            [event.target.id]: value,
+        })
+    }
+    const handleNewType = () => {
+        setNewType(!newType)
+    }
+    const handleNewVendor = () => {
+        setNewVendor(!newVendor)
+    }
+    let buttonText = isEdit? "Edit Vessel" : "Add Vessel"
+    function onSubmit(event) {
+        event.preventDefault()
+        if (event.currentTarget.checkValidity() === false){
+            event.stopPropagation()
+        }
+        else {
+            setValidated(true)
+            try {
+                submit(form, currentVessel._id)
+                setShowSubmitAlert(true)
+                setTimeout(() => {
+                    setShowSubmitAlert(false)
+                    handleClose()
+                }, 1000)
+            } catch (error) {
+                console.error(error)
+                setShowErrorAlert(true)
+                setTimeout(() => {
+                    setShowErrorAlert(false)
+                    handleClose()
+                }, 1000)
+            }
+        }
+    }
     return(
-        <Form>
-        <Row className="mb-3">
-            <Form.Group as={Col} controlId="vesselVesselName">
-                <Form.Label>Name</Form.Label>
-                <Form.Control required placeholder={name} defaultValue={isEdit? name: null} />
-            </Form.Group>
-            <Form.Group as={Col} controlId="vesselVesselType">
-                <Form.Label>Vessel Type</Form.Label>
-                <Form.Select required defaultValue={type}>
-                    <option>Gaiwan</option>
-                    <option>Yixing</option>
-                    <option>Kyusu</option>
-                </Form.Select>
-            </Form.Group>
-        </Row>
-        <Row className="mb-3">
-            <Form.Group as={Col} controlId="vesselCapacity">
-                <Form.Label>Capacity</Form.Label>
-                <InputGroup>
-                    <Form.Control placeholder={capacity} defaultValue={isEdit? capacity: null} />
-                    <InputGroup.Text>mL</InputGroup.Text>
-                </InputGroup>
-                
-            </Form.Group>
-            <Form.Group as={Col} controlId="vesselVendor">
-                <Form.Label>Vendor</Form.Label>
-                <Form.Control placeholder={vendor} defaultValue={isEdit? vendor: null} />
-            </Form.Group>
-        </Row>
-        <Row className="mb-3">
-            <Form.Group as={Col} controlId="vesselFavorite">
-                <Form.Check id="favorite" label="Favorite Vessel" checked={isEdit? favorite: undefined} />
-            </Form.Group>
-            <Form.Group as={Col} controlId="vesselExclude">
-                <Form.Check id="exclude" label="Exclude Vessel" checked={isEdit? exclude: undefined} />
-            </Form.Group>
-        </Row>
-        <Row className="mb-3">
-            <Form.Group as={Col} controlId="vesselIllegal">
-                <Form.Label>Disallowed Types</Form.Label>
-                <Form.Check id="white" label="White" checked={isEdit? illegal.white: undefined} />
-                <Form.Check id="green" label="Green" checked={isEdit? illegal.green: undefined} />
-                <Form.Check id="oolong" label="Oolong" checked={isEdit? illegal.oolong: undefined} />
-                <Form.Check id="black" label="Black" checked={isEdit? illegal.black: undefined} />
-                <Form.Check id="yellow" label="Yellow" checked={isEdit? illegal.yellow: undefined} />
-                <Form.Check id="sheng" label="Sheng Puer" checked={isEdit? illegal.sheng: undefined} />
-                <Form.Check id="shou" label="Shou Puer" checked={isEdit? illegal.shou: undefined} />
-                <Form.Check id="dark" label="Dark" checked={isEdit? illegal.dark: undefined} />
-                <Form.Check id="tisane" label="Tisane" checked={isEdit? illegal.tisane: undefined} />
-            </Form.Group>
-            <Form.Group as={Col} controlId="vesselPreferred">
-                <Form.Label>Preferred Types</Form.Label>
-                <Form.Check id="white" label="White" checked={isEdit? preferred.white: undefined} />
-                <Form.Check id="green" label="Green" checked={isEdit? preferred.green: undefined} />
-                <Form.Check id="oolong" label="Oolong" checked={isEdit? preferred.oolong: undefined} />
-                <Form.Check id="black" label="Black" checked={isEdit? preferred.black: undefined} />
-                <Form.Check id="yellow" label="Yellow" checked={isEdit? preferred.yellow: undefined} />
-                <Form.Check id="sheng" label="Sheng Puer" checked={isEdit? preferred.sheng: undefined} />
-                <Form.Check id="shou" label="Shou Puer" checked={isEdit? preferred.shou: undefined} />
-                <Form.Check id="dark" label="Dark" checked={isEdit? preferred.dark: undefined} />
-                <Form.Check id="tisane" label="Tisane" checked={isEdit? preferred.tisane: undefined} />
-            </Form.Group>
-        </Row>
-    </Form>
+        <Form noValidate validated={validated} onSubmit={onSubmit}>
+            <Row className="mb-3">
+                {/*Name*/}
+                <Form.Group>
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                        required
+                        id={"name"}
+                        onChange={handleChange}
+                        value={isEdit? form.name: undefined}
+                        isInvalid={form.name === undefined || form.name === ""}
+                    />
+                    <Form.Control.Feedback type="invalid">Name is required.</Form.Control.Feedback>
+                </Form.Group>
+            </Row>
+            <Row className="mb-3">
+                {/*Type*/}
+                <Form.Group as={Col}>
+                    <Form.Label>Vessel Type</Form.Label>
+                    {newType ? (
+                        <>
+                            <Form.Control
+                                id={"type"}
+                                onChange={handleChange}
+                                defaultValue={form.type}
+                                isInvalid={form.type === undefined || form.type === ""}
+                            />
+                            <Form.Control.Feedback type="invalid">Type is required.</Form.Control.Feedback>
+                        </>
+                    ) : (
+                        <Form.Select
+                            required
+                            id={"type"}
+                            onChange={handleChange}
+                            defaultValue={isEdit? form.type : undefined}
+                        >
+                            {vesselSelect}
+                        </Form.Select>
+                    )}
+                </Form.Group>
+                {/*Vendor*/}
+                <Form.Group as={Col}>
+                    <Form.Label>Vendor</Form.Label>
+                    {newVendor ? (
+                        <Form.Control
+                            id={"vendor"}
+                            onChange={handleChange}
+                            defaultValue={isEdit? form.vendor: undefined}
+                        />
+                    ) : (
+                        <Form.Select
+                            id={"vendor"}
+                            onChange={handleChange}
+                            defaultValue={form.vendor}
+                        >
+                            {vendorSelect}
+                        </Form.Select>
+                    )}
+                </Form.Group>
+            </Row>
+            <Row className="mb-3">
+                {/*New Type+Vendor Buttons*/}
+                <Col>
+                    <Button variant="outline-primary" onClick={() => handleNewType()} className="mx-1 my-1 my-sm-0" size={"sm"}>
+                        New Type
+                    </Button>
+                    <Button variant="outline-primary" onClick={() => handleNewVendor()} className="mx-1 my-1 my-sm-0" size={"sm"}>
+                        New Vendor
+                    </Button>
+                </Col>
+                {/*Capacity*/}
+                <Form.Group as={Col}>
+                    <Form.Label>Capacity</Form.Label>
+                    <InputGroup hasValidation>
+                        <Form.Control
+                            required
+                            id={"capacity"}
+                            onChange={handleChange}
+                            defaultValue={isEdit? form.capacity: undefined}
+                            isInvalid={form.capacity === 0 || isNaN(form.capacity)}
+                        />
+                        <InputGroup.Text>mL</InputGroup.Text>
+                        <Form.Control.Feedback type="invalid">Capacity must be a number > 0.</Form.Control.Feedback>
+                    </InputGroup>
+                </Form.Group>
+            </Row>
+            <Row className="mb-3">
+                {/*Favorite*/}
+                <Form.Group as={Col}>
+                    <Form.Check
+                        id="favorite"
+                        type={"switch"}
+                        label="Favorite Vessel"
+                        checked={form.favorite}
+                        onChange={handleSwitch}
+                    />
+                </Form.Group>
+                {/*Exclude*/}
+                <Form.Group as={Col}>
+                    <Form.Check
+                        id="exclude"
+                        type={"switch"}
+                        label="Exclude Vessel"
+                        checked={form.exclude}
+                        onChange={handleSwitch}
+                    />
+                </Form.Group>
+            </Row>
+            <Row className="mb-3">
+                {/*Disallowed*/}
+                <Form.Group as={Col} >
+                    <Form.Label>Disallowed Types</Form.Label>
+                    <Form.Select
+                        id={"disallowed"}
+                        onChange={handleMultiSelect}
+                        multiple={true}
+                        defaultValue={isEdit? form.disallowed : undefined}
+                    >
+                        {teaSelect}
+                    </Form.Select>
+                </Form.Group>
+                {/*Preferred*/}
+                <Form.Group as={Col} >
+                    <Form.Label>Preferred Types</Form.Label>
+                    <Form.Select
+                        id={"preferred"}
+                        onChange={handleMultiSelect}
+                        multiple={true}
+                        defaultValue={isEdit? form.preferred : undefined}
+                    >
+                        {teaSelect}
+                    </Form.Select>
+                </Form.Group>
+            </Row>
+            <Row>
+                <Col>
+                    <Button variant="primary" type={"submit"}>
+                        {buttonText}
+                    </Button>
+                </Col>
+                <Col>
+                    <Alert
+                        className={"p-2 text-center"}
+                        variant={"danger"}
+                        show={showErrorAlert}
+                        onClose={() => setShowErrorAlert(false)}
+                    >
+                        Submission Error!
+                    </Alert>
+                    <Alert
+                        className={"p-2 text-center"}
+                        variant={"primary"}
+                        show={showSubmitAlert}
+                        onClose={() => setShowSubmitAlert(false)}
+                    >
+                        Submitted!
+                    </Alert>
+                </Col>
+            </Row>
+        </Form>
     )
 }
