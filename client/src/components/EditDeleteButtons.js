@@ -4,12 +4,14 @@ import { useState } from "react"
 import Edit from "./Edit.js";
 import {useTea} from "../contexts/TeaContext.js";
 import {useVessels} from "../contexts/VesselContext.js";
+import {useSession} from "../contexts/SessionContext.js";
 
 export default function EditDeleteButtons({showButtons, label, id, deleteFunction, editFunction, type}){
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
     const [showEdit,setShowEdit] = useState(false)
     const { getTea } = useTea()
     const {getVessel} = useVessels()
+    const {getSession} = useSession()
     let current = {}
     function openDeleteConfirmModal() {
         setShowDeleteConfirm(true)
@@ -25,7 +27,7 @@ export default function EditDeleteButtons({showButtons, label, id, deleteFunctio
             current = getVessel(id)
             break
         case "session":
-            current = getTea(id)
+            current = getSession(id)
             break
         default:
             console.error("No type specified")

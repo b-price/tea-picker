@@ -68,7 +68,7 @@ export const TeaProvider = ({ children }) => {
     }, [sortQuery, teas])
 
     function getTea(id){
-        return teas.find(tea => tea._id === id)
+        return teas.find(tea => tea._id == id)
     }
 
     function addTea(tea) {

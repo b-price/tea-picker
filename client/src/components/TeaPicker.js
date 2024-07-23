@@ -6,6 +6,9 @@ import Session from './Session.js'
 import TeaPicked from './TeaPicked.js'
 import InTheMoodFor from './InTheMoodFor.js'
 import Add from "./Add.js";
+import {useSession} from "../contexts/SessionContext.js";
+import {useVessels} from "../contexts/VesselContext.js";
+import {useTea} from "../contexts/TeaContext.js";
 
 export default function TeaPicker(){
     const [showPickTea, setShowPickTea] = useState(false)
@@ -15,6 +18,9 @@ export default function TeaPicker(){
     const [showTeaPicked, setShowTeaPicked] = useState(false)
     const [showInTheMoodFor, setShowInTheMoodFor] = useState(false)
     const navigate = useNavigate()
+    const {sessions} = useSession()
+    const {getVessel} = useVessels()
+    const {getTea} = useTea()
 
     function handlePage(path) {
         navigate(path)
@@ -37,7 +43,15 @@ export default function TeaPicker(){
     function openInTheMoodForModal() {
         setShowInTheMoodFor(true)
     }
-    
+
+    let teaObj = {name: "", type: "", vendor: ""}
+    let vesselObj = {name: ""}
+    try{
+        vesselObj = getVessel(sessions[0].vessel)
+        teaObj = getTea(sessions[0].tea)
+    } catch(e) {
+        console.log(e)
+    }
     return (
         <>
             <Container>
@@ -65,7 +79,19 @@ export default function TeaPicker(){
                     <Card >
                         <Card.Body>
                             <Card.Title>Last Session</Card.Title>
-                            <Session buttons={false} />
+                            <Session
+                                date={sessions[0].date}
+                                teaName={teaObj.name}
+                                teaType={teaObj.type}
+                                teaVendor={teaObj.vendor}
+                                vesselName={vesselObj.name}
+                                quantity={sessions[0].quantity}
+                                rating={sessions[0].rating}
+                                comments={sessions[0].comments}
+                                id={sessions[0]._id}
+                                key={sessions[0]._id}
+                                buttons={false}
+                            />
                         </Card.Body>
                     </Card>
                     

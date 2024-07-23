@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, {useContext, useEffect, useState} from "react";
+import {useTea} from "./TeaContext.js";
+import {useVessels} from "./VesselContext.js";
 
 const userid = "666cccp"
 const serverRoot = 'http://localhost:5050';
@@ -11,16 +13,14 @@ export function useSession() {
 
 export const SessionProvider = ({ children }) => {
     const [sessions, setSessions] = useState([])
-    const [teaTypes, setTeaTypes] = useState([])
-    const [vendors, setVendors] = useState([])
     const [sortQuery, setSortQuery] = useState("date")
+    const {getTea} = useTea()
+    const {getVessel} = useVessels()
 
     useEffect(() => {
-        axios.get(`${serverRoot}/teas/?user=${userid}`)
+        axios.get(`${serverRoot}/sessions/?user=${userid}`)
             .then((response) => {
-                setSessions(sortTeas(response.data))
-                setTeaTypes([...new Set(sessions.map(tea => tea.type))])
-                setVendors([...new Set(sessions.map(tea => tea.vendor))])
+                setSessions(sortSessions(response.data))
             }).catch(error => {
             if (error.response) {
                 console.log("Error with response: " + error.response)
@@ -31,120 +31,95 @@ export const SessionProvider = ({ children }) => {
                 console.log("Non-axios error")
             }
         })
-        function sortTeas(rawTeas){
+        function sortSessions(rawSessions){
             switch (sortQuery){
-                case "name":
-                    rawTeas.sort((a, b) => a.name.localeCompare(b.name))
+                case "date":
+                    rawSessions.sort((a, b) => a.date - b.date)
                     break
-                case "type":
-                    rawTeas.sort((a, b) => a.type.localeCompare(b.type))
-                    break
-                case "quantity":
-                    rawTeas.sort((a, b) => a.quantity - b.quantity)
+                case "tea":
+                    rawSessions.sort((a, b) => getTea(a.tea).name.localeCompare(getTea(b.tea).name))
                     break
                 case "vendor":
-                    rawTeas.sort((a, b) => a.vendor.localeCompare(b.vendor))
+                    rawSessions.sort((a, b) => getTea(a.tea).vendor.localeCompare(getTea(b.tea).vendor))
                     break
-                case "cost":
-                    rawTeas.sort((a, b) => a.cost - b.cost)
+                case "type":
+                    rawSessions.sort((a, b) => getTea(a.tea).type.localeCompare(getTea(b.tea).type))
                     break
-                case "year":
-                    rawTeas.sort((a, b) => a.year - b.year)
+                case "vessel":
+                    rawSessions.sort((a, b) => getVessel(a.vessel).name.localeCompare(getVessel(b.vessel).name))
+                    break
+                case "quantity":
+                    rawSessions.sort((a, b) => b.quantity - a.quantity)
                     break
                 case "rating":
-                    rawTeas.sort((a, b) => b.rating - a.rating)
-                    break
-                case "ratio":
-                    rawTeas.sort((a, b) => a.ratio - b.ratio)
+                    rawSessions.sort((a, b) => b.rating - a.rating)
                     break
                 default:
-                    rawTeas.reverse()
+                    rawSessions.reverse()
                     break
             }
-            return rawTeas
+            return rawSessions
         }
     }, [sortQuery, sessions])
 
-    function getTea(id){
-        return sessions.find(tea => tea._id === id)
+    function getSession(id){
+        return sessions.find(session => session._id == id)
     }
 
-    function addTea(tea) {
-        if (typeof tea.tags === "string"){
-            tea.tags = tea.tags.split(",")
-        }
-        axios.post(`${serverRoot}/teas/`, {
+    function addSession(session) {
+        axios.post(`${serverRoot}/sessions/`, {
             user_id: userid,
-            name: tea.name,
-            type: tea.type,
-            quantity: +tea.quantity,
-            vendor: tea.vendor,
-            cost: +tea.cost,
-            year: +tea.year,
-            rating: +tea.rating,
-            ratio: +tea.ratio,
-            tags: tea.tags,
+            date: session.date,
+            tea: session.tea,
+            vessel: session.vessel,
+            quantity: +session.quantity,
+            rating: +session.rating,
+            comments: session.comments,
         }).then(response => {
             console.log(response)
-            //setTeas(prevTeas => [...prevTeas, tea])
         }).catch(error => {
             console.log(error)
         })
 
     }
 
-    function editTea(attributes, id){
-        if (typeof attributes.tags === "string"){
-            attributes.tags = attributes.tags.split(",")
-        }
-        axios.patch(`${serverRoot}/teas/${id}`, {
-            name: attributes.name,
-            type: attributes.type,
+    function editSession(attributes, id){
+        axios.patch(`${serverRoot}/sessions/${id}`, {
+            user_id: userid,
+            date: attributes.date,
+            tea: attributes.tea,
+            vessel: attributes.vessel,
             quantity: +attributes.quantity,
-            vendor: attributes.vendor,
-            cost: +attributes.cost,
-            year: +attributes.year,
             rating: +attributes.rating,
-            ratio: +attributes.ratio,
-            tags: attributes.tags,
+            comments: attributes.comments,
         }).then(response => {
             console.log(response)
-            setSessions(sessions.map(tea => {
-                if (tea._id === id){
-                    return attributes
-                } else {
-                    return tea
-                }
-            }))
         }).catch(error => {
             console.log(error)
         })
     }
 
-    function deleteTea(id) {
-        axios.delete(`${serverRoot}/teas/${id}`)
+    function deleteSession(id) {
+        axios.delete(`${serverRoot}/sessions/${id}`)
             .then(response => {
                 console.log(response)
-                //setTeas(teas.filter(tea => tea._id !== id))
             }).catch(error => {
             console.log(error)
         })
     }
 
-    function sortTea(attribute){
+    function sortSessions(attribute){
         setSortQuery(attribute)
     }
 
     return (
         <SessionContext.Provider value={{
-            teas: sessions,
-            teaTypes,
-            vendors,
-            getTea,
-            addTea,
-            editTea,
-            deleteTea,
-            sortTea
+            sessions,
+            getSession,
+            addSession,
+            editSession,
+            deleteSession,
+            sortSessions
         }}>{children}</SessionContext.Provider>
     )
 }

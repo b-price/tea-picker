@@ -61,7 +61,7 @@ export const VesselProvider = ({ children }) => {
     }, [sortQuery, vessels])
 
     function getVessel(id){
-        return vessels.find(vessel => vessel._id === id)
+        return vessels.find(vessel => vessel._id == id)
     }
 
     function addVessel(vessel) {
