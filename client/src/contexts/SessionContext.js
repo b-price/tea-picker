@@ -14,6 +14,7 @@ export function useSession() {
 export const SessionProvider = ({ children }) => {
     const [sessions, setSessions] = useState([])
     const [sortQuery, setSortQuery] = useState("date")
+    const [change, setChange] = useState(false)
     const {getTea} = useTea()
     const {getVessel} = useVessels()
 
@@ -21,6 +22,7 @@ export const SessionProvider = ({ children }) => {
         axios.get(`${serverRoot}/sessions/?user=${userid}`)
             .then((response) => {
                 setSessions(sortSessions(response.data))
+                setChange(false)
             }).catch(error => {
             if (error.response) {
                 console.log("Error with response: " + error.response)
@@ -60,7 +62,7 @@ export const SessionProvider = ({ children }) => {
             }
             return rawSessions
         }
-    }, [sortQuery, sessions])
+    }, [change])
 
     function getSession(id){
         return sessions.find(session => session._id == id)
@@ -77,6 +79,7 @@ export const SessionProvider = ({ children }) => {
             comments: session.comments,
         }).then(response => {
             console.log(response)
+            setChange(true)
         }).catch(error => {
             console.log(error)
         })
@@ -94,6 +97,7 @@ export const SessionProvider = ({ children }) => {
             comments: attributes.comments,
         }).then(response => {
             console.log(response)
+            setChange(true)
         }).catch(error => {
             console.log(error)
         })
@@ -103,6 +107,7 @@ export const SessionProvider = ({ children }) => {
         axios.delete(`${serverRoot}/sessions/${id}`)
             .then(response => {
                 console.log(response)
+                setChange(true)
             }).catch(error => {
             console.log(error)
         })

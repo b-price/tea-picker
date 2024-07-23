@@ -25,14 +25,14 @@ export default function SessionInputForm({
     if (teas){
         teas.forEach(tea => {
             teaSelect.push(
-                <option value={tea._id}>{tea.name}</option>
+                <option value={tea._id} key={tea._id}>{tea.name}</option>
             )
         })
     }
     if (vessels){
         vessels.forEach(vessel => {
             vesselSelect.push(
-                <option value={vessel._id}>{vessel.name}</option>
+                <option value={vessel._id} key={vessel._id}>{vessel.name}</option>
             )
         })
     }
@@ -49,7 +49,7 @@ export default function SessionInputForm({
 
     const [validated, setValidated] = useState(false);
     const handleChange = (event) => {
-        console.log(event.target.value);
+        console.log(event);
         setForm({
             ...form,
             [event.target.id]: event.target.value,
@@ -59,6 +59,7 @@ export default function SessionInputForm({
     function onSubmit(event) {
         event.preventDefault()
         if (event.currentTarget.checkValidity() === false){
+
             event.stopPropagation()
         }
         else {
@@ -103,7 +104,7 @@ export default function SessionInputForm({
                         required
                         id={"tea"}
                         onChange={handleChange}
-                        defaultValue={isEdit? form.tea : undefined}
+                        defaultValue={form.tea}
                     >
                         {teaSelect}
                     </Form.Select>

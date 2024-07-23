@@ -21,17 +21,18 @@ export default function TeaInputForm({
     const {teaTypes, vendors} = useTea()
     let teaSelect = []
     let vendorSelect = []
+
     if (teaTypes){
         teaTypes.forEach((type, index) => {
             teaSelect.push(
-                <option value={type}>{type}</option>
+                <option value={type} key={index}>{type}</option>
             )
         })
     }
     if (vendors){
         vendors.forEach((vendor, index) => {
             vendorSelect.push(
-                <option value={vendor}>{vendor}</option>
+                <option value={vendor} key={index}>{vendor}</option>
             )
         })
     }
@@ -59,9 +60,21 @@ export default function TeaInputForm({
     }
     const handleNewType = () => {
         setNewType(!newType)
+        if (!isEdit) {
+            setForm({
+                ...form,
+                type: ""
+            })
+        }
     }
     const handleNewVendor = () => {
         setNewVendor(!newVendor)
+        if (!isEdit) {
+            setForm({
+                ...form,
+                vendor: ""
+            })
+        }
     }
     let buttonText = isEdit? "Edit Tea" : "Add Tea"
     function onSubmit(event) {

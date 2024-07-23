@@ -3,7 +3,7 @@ import TeaInputForm from "./TeaInputForm.js";
 import SessionInputForm from "./SessionInputForm.js";
 import VesselInputForm from "./VesselInputForm.js";
 
-export default function Add({show, handleClose, add, type}) {
+export default function Add({show, handleClose, add, type, openAddTeaModal, openAddVesselModal}) {
     let titleText
     let form
     switch (type) {
@@ -17,7 +17,7 @@ export default function Add({show, handleClose, add, type}) {
             break
         case "session":
             titleText = "Add Session"
-            form = <SessionInputForm submit={add} handleClose={handleClose}/>
+            form = <SessionInputForm submit={add} handleClose={handleClose} openAddTeaModal={openAddTeaModal} openAddVesselModal={openAddVesselModal}/>
             break
         default:
             console.log("Error: no input type specified")

@@ -16,13 +16,17 @@ export const TeaProvider = ({ children }) => {
     const [teaTypes, setTeaTypes] = useState([])
     const [vendors, setVendors] = useState([])
     const [sortQuery, setSortQuery] = useState("date")
+    const [change, setChange] = useState(false)
 
     useEffect(() => {
         axios.get(`${serverRoot}/teas/?user=${userid}`)
             .then((response) => {
                 setTeas(sortTeas(response.data))
+                setChange(false)
                 setTeaTypes([...new Set(teas.map(tea => tea.type))])
                 setVendors([...new Set(teas.map(tea => tea.vendor))])
+                console.log("refresh")
+
             }).catch(error => {
             if (error.response) {
                 console.log("Error with response: " + error.response)
@@ -65,7 +69,7 @@ export const TeaProvider = ({ children }) => {
             }
             return rawTeas
         }
-    }, [sortQuery, teas])
+    }, [change])
 
     function getTea(id){
         return teas.find(tea => tea._id == id)
@@ -88,7 +92,8 @@ export const TeaProvider = ({ children }) => {
             tags: tea.tags,
         }).then(response => {
             console.log(response)
-            //setTeas(prevTeas => [...prevTeas, tea])
+            setChange(true)
+            // setTeas(prevTeas => [...prevTeas, tea])
         }).catch(error => {
             console.log(error)
         })
@@ -111,8 +116,9 @@ export const TeaProvider = ({ children }) => {
             tags: attributes.tags,
         }).then(response => {
             console.log(response)
+            setChange(true)
             // setTeas(teas.map(tea => {
-            //     if (tea._id === id){
+            //     if (tea._id == id){
             //         return attributes
             //     } else {
             //         return tea
@@ -127,7 +133,8 @@ export const TeaProvider = ({ children }) => {
         axios.delete(`${serverRoot}/teas/${id}`)
             .then(response => {
                 console.log(response)
-                //setTeas(teas.filter(tea => tea._id !== id))
+                setChange(true)
+                // setTeas(teas.filter(tea => tea._id != id))
             }).catch(error => {
             console.log(error)
         })

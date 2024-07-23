@@ -26,21 +26,21 @@ export default function VesselInputForm({
     if (vesselTypes){
         vesselTypes.forEach((type, index) => {
             vesselSelect.push(
-                <option value={type}>{type}</option>
+                <option value={type} key={index}>{type}</option>
             )
         })
     }
     if (vendors){
         vendors.forEach((vendor, index) => {
             vendorSelect.push(
-                <option value={vendor}>{vendor}</option>
+                <option value={vendor} key={index}>{vendor}</option>
             )
         })
     }
     if (teaTypes){
         teaTypes.forEach((type, index) => {
             teaSelect.push(
-                <option value={type}>{type}</option>
+                <option value={type} key={index}>{type}</option>
             )
         })
     }
@@ -63,7 +63,6 @@ export default function VesselInputForm({
 
     const [validated, setValidated] = useState(false);
     const handleChange = (event) => {
-        console.log(event.target.value);
         setForm({
             ...form,
             [event.target.id]: event.target.value,
@@ -85,9 +84,21 @@ export default function VesselInputForm({
     }
     const handleNewType = () => {
         setNewType(!newType)
+        if (!isEdit) {
+            setForm({
+                ...form,
+                type: ""
+            })
+        }
     }
     const handleNewVendor = () => {
         setNewVendor(!newVendor)
+        if (!isEdit) {
+            setForm({
+                ...form,
+                vendor: ""
+            })
+        }
     }
     let buttonText = isEdit? "Edit Vessel" : "Add Vessel"
     function onSubmit(event) {
@@ -137,9 +148,10 @@ export default function VesselInputForm({
                     {newType ? (
                         <>
                             <Form.Control
+                                required
                                 id={"type"}
                                 onChange={handleChange}
-                                defaultValue={form.type}
+                                defaultValue={isEdit? form.type : undefined}
                                 isInvalid={form.type === undefined || form.type === ""}
                             />
                             <Form.Control.Feedback type="invalid">Type is required.</Form.Control.Feedback>
@@ -149,7 +161,7 @@ export default function VesselInputForm({
                             required
                             id={"type"}
                             onChange={handleChange}
-                            defaultValue={isEdit? form.type : undefined}
+                            defaultValue={form.type}
                         >
                             {vesselSelect}
                         </Form.Select>

@@ -14,12 +14,14 @@ export const VesselProvider = ({ children }) => {
     const [teaTypes, setTeaTypes] = useState([])
     const [vendors, setVendors] = useState([])
     const [vesselTypes, setVesselTypes] = useState([])
+    const [change, setChange] = useState(false)
     const [sortQuery, setSortQuery] = useState("date")
 
     useEffect(() => {
         axios.get(`${serverRoot}/vessels/?user=${userid}`)
             .then((response) => {
                 setVessels(sortVessels(response.data))
+                setChange(false)
                 setVesselTypes([...new Set(vessels.map(vessel => vessel.type))])
                 setVendors([...new Set(vessels.map(vessel => vessel.vendor))])
             }).catch(error => {
@@ -58,7 +60,7 @@ export const VesselProvider = ({ children }) => {
             }
             return rawVessels
         }
-    }, [sortQuery, vessels])
+    }, [change])
 
     function getVessel(id){
         return vessels.find(vessel => vessel._id == id)
@@ -83,6 +85,7 @@ export const VesselProvider = ({ children }) => {
             preferred: vessel.preferred,
         }).then(response => {
             console.log(response)
+            setChange(true)
             //setTeas(prevTeas => [...prevTeas, tea])
         }).catch(error => {
             console.log(error)
@@ -108,6 +111,7 @@ export const VesselProvider = ({ children }) => {
             preferred: attributes.preferred,
         }).then(response => {
             console.log(response)
+            setChange(true)
         }).catch(error => {
             console.log(error)
         })
@@ -117,6 +121,7 @@ export const VesselProvider = ({ children }) => {
         axios.delete(`${serverRoot}/vessels/${id}`)
             .then(response => {
                 console.log(response)
+                setChange(true)
                 //setTeas(teas.filter(tea => tea._id !== id))
             }).catch(error => {
             console.log(error)

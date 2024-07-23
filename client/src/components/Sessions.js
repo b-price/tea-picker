@@ -10,8 +10,8 @@ import {useVessels} from "../contexts/VesselContext.js";
 export default function Sessions(){
     const [showAddTea, setShowAddTea] = useState(false)
     const {sessions, addSession, deleteSession, editSession, sortSessions} = useSession()
-    const {getTea} = useTea()
-    const {getVessel} = useVessels()
+    const {getTea, addTea} = useTea()
+    const {getVessel, addVessel} = useVessels()
     
     function openAddTeaModal() {
         setShowAddTea(true)
@@ -93,13 +93,23 @@ export default function Sessions(){
             <Add
                 show={showAddSession} 
                 handleClose={() => setShowAddSession(false)} 
-                openAddTeaModal={() => openAddTeaModal()}
-                openAddVesselModal={() => openAddVesselModal()}
+                openAddTeaModal={openAddTeaModal}
+                openAddVesselModal={openAddVesselModal}
                 add={addSession}
                 type={"session"}
             />
-            <Add show={showAddTea} handleClose={() => setShowAddTea(false)} type={"tea"} />
-            <Add show={showAddVessel} handleClose={() => setShowAddVessel(false)} type={"vessel"} />
+            <Add
+                show={showAddTea}
+                handleClose={() => setShowAddTea(false)}
+                add={addTea}
+                type={"tea"}
+            />
+            <Add
+                show={showAddVessel}
+                handleClose={() => setShowAddVessel(false)}
+                add={addVessel}
+                type={"vessel"}
+            />
         </>
     )
 }
