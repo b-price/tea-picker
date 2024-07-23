@@ -12,11 +12,21 @@ export function useSession() {
 }
 
 export const SessionProvider = ({ children }) => {
-    const [sessions, setSessions] = useState([])
+    const [sessions, setSessions] = useState([
+        {
+            date:"2000-01-01",
+            tea:"",
+            quantity:0,
+            vessel:"",
+            rating:0,
+            comments:"",
+        }
+    ])
     const [sortQuery, setSortQuery] = useState("date")
     const [change, setChange] = useState(false)
-    const {getTea} = useTea()
-    const {getVessel} = useVessels()
+    const [pickedSession, setPickedSession] = useState([])
+    const {getTea, pickTea} = useTea()
+    const {vessels, getVessel} = useVessels()
 
     useEffect(() => {
         axios.get(`${serverRoot}/sessions/?user=${userid}`)
@@ -117,6 +127,20 @@ export const SessionProvider = ({ children }) => {
         setSortQuery(attribute)
     }
 
+    function getPickedSession(){
+        let pickedTea = pickTea()
+        let pickedVessel = vessels[0]
+        let amount = pickedVessel.capacity * 0.01 * pickedTea.ratio
+        return {
+            date: new Date().toJSON().slice(0, 10),
+            tea: pickedTea._id,
+            quantity: Math.round(amount * 100) / 100,
+            vessel: pickedVessel._id,
+            rating: 0,
+            comments: "",
+        }
+    }
+
     return (
         <SessionContext.Provider value={{
             sessions,
@@ -124,7 +148,8 @@ export const SessionProvider = ({ children }) => {
             addSession,
             editSession,
             deleteSession,
-            sortSessions
+            sortSessions,
+            getPickedSession
         }}>{children}</SessionContext.Provider>
     )
 }

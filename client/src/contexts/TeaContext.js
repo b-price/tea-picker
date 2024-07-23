@@ -12,7 +12,17 @@ export function useTea() {
 }
 
 export const TeaProvider = ({ children }) => {
-    const [teas, setTeas] = useState([])
+    const [teas, setTeas] = useState([{
+        name: "",
+        type: "",
+        quantity: 0,
+        vendor: "",
+        cost: 0,
+        year: 0,
+        rating: 0,
+        ratio: 4.5,
+        tags: []
+    }])
     const [teaTypes, setTeaTypes] = useState([])
     const [vendors, setVendors] = useState([])
     const [sortQuery, setSortQuery] = useState("date")
@@ -72,7 +82,20 @@ export const TeaProvider = ({ children }) => {
     }, [change])
 
     function getTea(id){
-        return teas.find(tea => tea._id == id)
+        let notFound = {
+            name: "",
+            type: "",
+            quantity: 0,
+            vendor: "",
+            cost: 0,
+            year: 0,
+            rating: 0,
+            ratio: 4.5,
+            tags: []
+        }
+        let result = teas.find(tea => tea._id == id)
+        if (result !== undefined) return result
+        else return notFound
     }
 
     function addTea(tea) {
@@ -145,20 +168,21 @@ export const TeaProvider = ({ children }) => {
         for (let i = 0; i < teas.length; i++){
             cumulativeWeights[i] = getPickWeight(teas[i].quantity, teas[i].rating, teas[i].cost) + (cumulativeWeights[i - 1] || 0)
         }
+        //console.log(cumulativeWeights)
         const maxCumulativeWeight = cumulativeWeights[cumulativeWeights.length - 1]
         const randomNumber = maxCumulativeWeight * Math.random()
+        console.log(randomNumber)
+
         for (let itemIndex = 0; itemIndex < teas.length; itemIndex += 1) {
             if (cumulativeWeights[itemIndex] >= randomNumber) {
-              return {
-                tea: teas[itemIndex],
-                index: itemIndex,
-              }
+              return teas[itemIndex]
             }
         }
+
     }
 
     function getPickWeight(quantity, rating, cost){
-        return Math.sqrt((QUANTITY_RATING_COEFF * quantity * rating)/(Math.pow(cost, 2) * COST_COEFF))
+        return Math.sqrt((QUANTITY_RATING_COEFF * quantity * rating)/(Math.pow(cost + 1, 2) * COST_COEFF))
     }
 
     function sortTea(attribute){

@@ -233,7 +233,7 @@ export default function TeaInputForm({
                                 defaultValue={form.ratio}
                                 isInvalid={isNaN(form.ratio)}
                             />
-                            <InputGroup.Text>g/mL</InputGroup.Text>
+                            <InputGroup.Text>g/100mL</InputGroup.Text>
                             <Form.Control.Feedback type="invalid">Ratio must be a number.</Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>

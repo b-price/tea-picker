@@ -10,7 +10,18 @@ export function useVessels() {
 }
 
 export const VesselProvider = ({ children }) => {
-    const [vessels, setVessels] = useState([])
+    const [vessels, setVessels] = useState([
+        {
+            name:"",
+            type:"",
+            capacity:0,
+            vendor:"",
+            illegal:[],
+            preferred:[],
+            favorite:false,
+            exclude:false
+        }
+    ])
     const [teaTypes, setTeaTypes] = useState([])
     const [vendors, setVendors] = useState([])
     const [vesselTypes, setVesselTypes] = useState([])
@@ -63,7 +74,18 @@ export const VesselProvider = ({ children }) => {
     }, [change])
 
     function getVessel(id){
-        return vessels.find(vessel => vessel._id == id)
+        let notFound = {
+            name:"",
+            type:"",
+            capacity:0,
+            vendor:"",
+            illegal:[],
+            preferred:[],
+            favorite:false,
+            exclude:false
+        }
+        let result = vessels.find(vessel => vessel._id == id)
+        return result !== undefined? result : notFound
     }
 
     function addVessel(vessel) {

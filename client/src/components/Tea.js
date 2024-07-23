@@ -17,7 +17,7 @@ export default function Tea(props){
                 <TeaStat category={"Rating"} data={props.rating + "/10"} />
                 <TeaStat category={"Year"} data={props.year} />
                 {/*<TeaStat category={"Sessions"} data={"5"} />*/}
-                <TeaStat category={"Tea:Water"} data={props.ratio + "g/mL"} />
+                <TeaStat category={"Tea:Water"} data={props.ratio + "g/100mL"} />
                 
             </ListGroup>
             

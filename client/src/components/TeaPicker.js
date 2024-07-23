@@ -9,8 +9,12 @@ import Add from "./Add.js";
 import {useSession} from "../contexts/SessionContext.js";
 import {useVessels} from "../contexts/VesselContext.js";
 import {useTea} from "../contexts/TeaContext.js";
+import Edit from "./Edit.js";
 
 export default function TeaPicker(){
+    const {sessions, addSession} = useSession()
+    const {getVessel, addVessel} = useVessels()
+    const {getTea, addTea} = useTea()
     const [showPickTea, setShowPickTea] = useState(false)
     const [showAddTea, setShowAddTea] = useState(false)
     const [showAddVessel, setShowAddVessel] = useState(false)
@@ -18,9 +22,7 @@ export default function TeaPicker(){
     const [showTeaPicked, setShowTeaPicked] = useState(false)
     const [showInTheMoodFor, setShowInTheMoodFor] = useState(false)
     const navigate = useNavigate()
-    const {sessions} = useSession()
-    const {getVessel} = useVessels()
-    const {getTea} = useTea()
+    const [pickedSession, setPickedSession] = useState()
 
     function handlePage(path) {
         navigate(path)
@@ -43,15 +45,21 @@ export default function TeaPicker(){
     function openInTheMoodForModal() {
         setShowInTheMoodFor(true)
     }
+    function updatePicked(session){
+        setPickedSession(session)
+    }
 
     let teaObj = {name: "", type: "", vendor: ""}
     let vesselObj = {name: ""}
-    try{
-        vesselObj = getVessel(sessions[0].vessel)
-        teaObj = getTea(sessions[0].tea)
-    } catch(e) {
-        console.log(e)
+    if (sessions){
+        try{
+            vesselObj = getVessel(sessions[0].vessel)
+            teaObj = getTea(sessions[0].tea)
+        } catch(e) {
+            console.log(e)
+        }
     }
+
     return (
         <>
             <Container>
@@ -104,19 +112,33 @@ export default function TeaPicker(){
                 openTeaPickedModal={() => openTeaPickedModal()}
                 openInTheMoodForModal={() => openInTheMoodForModal()}
             />
-            <Add show={showAddTea} handleClose={() => setShowAddTea(false)} type={"tea"}/>
-            <Add show={showAddVessel} handleClose={() => setShowAddVessel(false)} type={"vessel"} />
             <Add
-                show={showAddSession} 
+                show={showAddTea}
+                handleClose={() => setShowAddTea(false)}
+                add={addTea}
+                type={"tea"}
+            />
+            <Add
+                show={showAddVessel}
+                handleClose={() => setShowAddVessel(false)}
+                add={addVessel}
+                type={"vessel"}
+            />
+            <Add
+                show={showAddSession}
                 handleClose={() => setShowAddSession(false)}
-                openAddTeaModal={() => openAddTeaModal()}
+                add={addSession}
+                openAddTeaModal={openAddSessionModal}
+                openAddVesselModal={openAddVesselModal}
                 type={"session"}
+                current={pickedSession}
             />
             <TeaPicked 
                 show={showTeaPicked} 
                 handleClose={() => setShowTeaPicked(false)} 
                 openPickTeaModal={() => openPickTeaModal()}
                 openAddSessionModal={() => openAddSessionModal()}
+                updatePicked={updatePicked}
             />
             <InTheMoodFor 
                 show={showInTheMoodFor}
