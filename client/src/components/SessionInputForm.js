@@ -16,10 +16,33 @@ export default function SessionInputForm({
     submit,
     handleClose,
     openAddTeaModal,
-    openAddVesselModal
+    openAddVesselModal,
+    after = () => {}
 }) {
     const {teas, getTea} = useTea()
     const {vessels, getVessel} = useVessels()
+
+    // const [vesselSelect, setVesselSelect] = useState([getVessels()])
+    // const [teaSelect, setTeaSelect] = useState([getTeas()])
+    // function getVessels(){
+    //     let vesselSelection = []
+    //     vessels.forEach(vessel => {
+    //         vesselSelection.push(
+    //             <option value={vessel._id} key={vessel._id}>{vessel.name}</option>
+    //         )
+    //     })
+    //     return vesselSelection
+    // }
+    // function getTeas(){
+    //     let teaSelection = []
+    //     teas.forEach(tea => {
+    //         teaSelection.push(
+    //             <option value={tea._id} key={tea._id}>{tea.name}</option>
+    //         )
+    //     })
+    //     return teaSelection
+    // }
+
     let teaSelect = []
     let vesselSelect = []
     if (teas){
@@ -40,8 +63,8 @@ export default function SessionInputForm({
     const [showSubmitAlert, setShowSubmitAlert] = useState(false);
     const [form, setForm] = useState({
         date: currentSession.date,
-        tea: !isEdit? teas[0]._id: currentSession.tea,
-        vessel: !isEdit? vessels[0]._id: currentSession.vessel,
+        tea: currentSession.tea === ""? teas[0]._id: currentSession.tea,
+        vessel: currentSession.vessel === ""? vessels[0]._id: currentSession.vessel,
         quantity: currentSession.quantity,
         rating: currentSession.rating,
         comments: currentSession.comments,
@@ -67,6 +90,7 @@ export default function SessionInputForm({
             try {
                 submit(form, currentSession._id)
                 setShowSubmitAlert(true)
+                after()
                 setTimeout(() => {
                     setShowSubmitAlert(false)
                     handleClose()
@@ -118,7 +142,7 @@ export default function SessionInputForm({
                         required
                         id={"vessel"}
                         onChange={handleChange}
-                        defaultValue={isEdit? form.vessel : undefined}
+                        defaultValue={form.vessel}
                     >
                         {vesselSelect}
                     </Form.Select>
@@ -143,7 +167,7 @@ export default function SessionInputForm({
                             id={"quantity"}
                             onChange={handleChange}
                             isInvalid={form.quantity === 0 || isNaN(form.quantity)}
-                            defaultValue={isEdit? form.quantity: undefined}
+                            defaultValue={form.quantity === 0? undefined : form.quantity}
                         />
                         <InputGroup.Text>grams</InputGroup.Text>
                         <Form.Control.Feedback type="invalid">Quantity must be a number > 0.</Form.Control.Feedback>
@@ -155,7 +179,7 @@ export default function SessionInputForm({
                     <Form.Control
                         id={"rating"}
                         onChange={handleChange}
-                        defaultValue={isEdit? form.rating: undefined}
+                        defaultValue={form.rating === 0? undefined: form.rating}
                         isInvalid={isNaN(form.rating) || form.rating > 10 || form.rating < 0 || (form.rating > 0 && form.rating < 1)}
                     />
                     <Form.Control.Feedback type="invalid">Rating must be a number 1-10.</Form.Control.Feedback>
@@ -168,7 +192,7 @@ export default function SessionInputForm({
                     <Form.Control
                         id={"comments"}
                         onChange={handleChange}
-                        defaultValue={isEdit? form.comments: undefined}
+                        defaultValue={form.comments}
                     />
                 </Form.Group>
             </Row>

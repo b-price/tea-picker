@@ -48,6 +48,10 @@ export default function TeaPicker(){
     function updatePicked(session){
         setPickedSession(session)
     }
+    function onNewSession(){
+        updatePicked({...sessions[0], date: new Date().toJSON().slice(0, 10)})
+        setShowAddSession(true)
+    }
 
     let teaObj = {name: "", type: "", vendor: ""}
     let vesselObj = {name: ""}
@@ -86,20 +90,29 @@ export default function TeaPicker(){
                 <Row className="py-5">
                     <Card >
                         <Card.Body>
-                            <Card.Title>Last Session</Card.Title>
-                            <Session
-                                date={sessions[0].date}
-                                teaName={teaObj.name}
-                                teaType={teaObj.type}
-                                teaVendor={teaObj.vendor}
-                                vesselName={vesselObj.name}
-                                quantity={sessions[0].quantity}
-                                rating={sessions[0].rating}
-                                comments={sessions[0].comments}
-                                id={sessions[0]._id}
-                                key={sessions[0]._id}
-                                buttons={false}
-                            />
+                            <Row className={"align-items-center"}>
+                                <Col>
+                                    <Card.Title>Last Session</Card.Title>
+                                </Col>
+                                <Col>
+                                    <Button variant={"primary"} onClick={() => onNewSession()} className={"float-end me-2 mb-3"}>New Session</Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Session
+                                    date={sessions[0].date}
+                                    teaName={teaObj.name}
+                                    teaType={teaObj.type}
+                                    teaVendor={teaObj.vendor}
+                                    vesselName={vesselObj.name}
+                                    quantity={sessions[0].quantity}
+                                    rating={sessions[0].rating}
+                                    comments={sessions[0].comments}
+                                    id={sessions[0]._id}
+                                    key={sessions[0]._id}
+                                    buttons={false}
+                                />
+                            </Row>
                         </Card.Body>
                     </Card>
                     
@@ -132,6 +145,7 @@ export default function TeaPicker(){
                 openAddVesselModal={openAddVesselModal}
                 type={"session"}
                 current={pickedSession}
+                after={() => setShowTeaPicked(false)}
             />
             <TeaPicked 
                 show={showTeaPicked} 

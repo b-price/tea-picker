@@ -3,7 +3,7 @@ import TeaInputForm from "./TeaInputForm.js";
 import SessionInputForm from "./SessionInputForm.js";
 import VesselInputForm from "./VesselInputForm.js";
 
-export default function Add({show, handleClose, add, type, openAddTeaModal, openAddVesselModal, current}) {
+export default function Add({show, handleClose, add, type, openAddTeaModal, openAddVesselModal, current, after}) {
     let titleText
     let form
     switch (type) {
@@ -23,6 +23,7 @@ export default function Add({show, handleClose, add, type, openAddTeaModal, open
                 openAddTeaModal={openAddTeaModal}
                 openAddVesselModal={openAddVesselModal}
                 currentSession={current}
+                after={after}
             />
             break
         default:

@@ -130,8 +130,9 @@ export const SessionProvider = ({ children }) => {
     }
 
     function getPickedSession(){
+        let randomVessel = Math.floor(Math.random() * vessels.length)
         let pickedTea = pickTea()
-        let pickedVessel = vessels[0]
+        let pickedVessel = vessels[randomVessel]
         let amount = pickedVessel.capacity * 0.01 * pickedTea.ratio
         return {
             date: new Date().toJSON().slice(0, 10),
