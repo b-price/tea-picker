@@ -10,18 +10,7 @@ export function useVessels() {
 }
 
 export const VesselProvider = ({ children }) => {
-    const [vessels, setVessels] = useState([
-        {
-            name:"",
-            type:"",
-            capacity:0,
-            vendor:"",
-            illegal:[],
-            preferred:[],
-            favorite:false,
-            exclude:false
-        }
-    ])
+
     const [teaTypes, setTeaTypes] = useState([])
     const [vendors, setVendors] = useState([])
     const [vesselTypes, setVesselTypes] = useState([])
@@ -32,9 +21,9 @@ export const VesselProvider = ({ children }) => {
         axios.get(`${serverRoot}/vessels/?user=${userid}`)
             .then((response) => {
                 setVessels(sortVessels(response.data))
+                setVesselTypes([...new Set(response.data.map(vessel => vessel.type))])
+                setVendors([...new Set(response.data.map(vessel => vessel.vendor))])
                 setChange(false)
-                setVesselTypes([...new Set(vessels.map(vessel => vessel.type))])
-                setVendors([...new Set(vessels.map(vessel => vessel.vendor))])
             }).catch(error => {
             if (error.response) {
                 console.log("Error with response: " + error.response)
@@ -72,6 +61,19 @@ export const VesselProvider = ({ children }) => {
             return rawVessels
         }
     }, [change])
+
+    const [vessels, setVessels] = useState([
+        {
+            name:"",
+            type:"",
+            capacity:0,
+            vendor:"",
+            illegal:[],
+            preferred:[],
+            favorite:false,
+            exclude:false
+        }
+    ])
 
     function getVessel(id){
         let notFound = {
@@ -152,6 +154,7 @@ export const VesselProvider = ({ children }) => {
 
     function sortVessels(attribute){
         setSortQuery(attribute)
+        setChange(true)
     }
 
     return (

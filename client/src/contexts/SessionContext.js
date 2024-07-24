@@ -12,16 +12,6 @@ export function useSession() {
 }
 
 export const SessionProvider = ({ children }) => {
-    const [sessions, setSessions] = useState([
-        {
-            date:"2000-01-01",
-            tea:"",
-            quantity:0,
-            vessel:"",
-            rating:0,
-            comments:"",
-        }
-    ])
     const [sortQuery, setSortQuery] = useState("date")
     const [change, setChange] = useState(false)
     const [pickedSession, setPickedSession] = useState([])
@@ -74,6 +64,17 @@ export const SessionProvider = ({ children }) => {
         }
     }, [change])
 
+    const [sessions, setSessions] = useState([
+        {
+            date:"2000-01-01",
+            tea:"",
+            quantity:0,
+            vessel:"",
+            rating:0,
+            comments:"",
+        }
+    ])
+
     function getSession(id){
         return sessions.find(session => session._id == id)
     }
@@ -125,6 +126,7 @@ export const SessionProvider = ({ children }) => {
 
     function sortSessions(attribute){
         setSortQuery(attribute)
+        setChange(true)
     }
 
     function getPickedSession(){

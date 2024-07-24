@@ -12,17 +12,7 @@ export function useTea() {
 }
 
 export const TeaProvider = ({ children }) => {
-    const [teas, setTeas] = useState([{
-        name: "",
-        type: "",
-        quantity: 0,
-        vendor: "",
-        cost: 0,
-        year: 0,
-        rating: 0,
-        ratio: 4.5,
-        tags: []
-    }])
+
     const [teaTypes, setTeaTypes] = useState([])
     const [vendors, setVendors] = useState([])
     const [sortQuery, setSortQuery] = useState("date")
@@ -32,12 +22,13 @@ export const TeaProvider = ({ children }) => {
         axios.get(`${serverRoot}/teas/?user=${userid}`)
             .then((response) => {
                 setTeas(sortTeas(response.data))
+                setTeaTypes([...new Set(response.data.map(tea => tea.type))])
+                setVendors([...new Set(response.data.map(tea => tea.vendor))])
                 setChange(false)
-                setTeaTypes([...new Set(teas.map(tea => tea.type))])
-                setVendors([...new Set(teas.map(tea => tea.vendor))])
                 console.log("refresh")
 
-            }).catch(error => {
+            })
+            .catch(error => {
             if (error.response) {
                 console.log("Error with response: " + error.response)
             } else if (error.request) {
@@ -81,6 +72,17 @@ export const TeaProvider = ({ children }) => {
         }
     }, [change])
 
+    const [teas, setTeas] = useState([{
+        name: "",
+        type: "",
+        quantity: 0,
+        vendor: "",
+        cost: 0,
+        year: 0,
+        rating: 0,
+        ratio: 4.5,
+        tags: []
+    }])
     function getTea(id){
         let notFound = {
             name: "",
@@ -187,6 +189,7 @@ export const TeaProvider = ({ children }) => {
 
     function sortTea(attribute){
         setSortQuery(attribute)
+        setChange(true)
     }
 
     return (

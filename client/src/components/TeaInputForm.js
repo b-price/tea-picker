@@ -1,5 +1,5 @@
 import {Form, Row, Col, InputGroup, Button, Alert} from "react-bootstrap";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useTea} from "../contexts/TeaContext.js";
 
 export default function TeaInputForm({
@@ -19,23 +19,12 @@ export default function TeaInputForm({
     handleClose
 }) {
     const {teaTypes, vendors} = useTea()
-    let teaSelect = []
-    let vendorSelect = []
 
-    if (teaTypes){
-        teaTypes.forEach((type, index) => {
-            teaSelect.push(
-                <option value={type} key={index}>{type}</option>
-            )
-        })
-    }
-    if (vendors){
-        vendors.forEach((vendor, index) => {
-            vendorSelect.push(
-                <option value={vendor} key={index}>{vendor}</option>
-            )
-        })
-    }
+
+    const [vendorSelect, setVendorSelect] = useState([getVendors()])
+    const [teaSelect, setTeaSelect] = useState([getTypes()])
+
+
     const [showErrorAlert, setShowErrorAlert] = useState(false);
     const [showSubmitAlert, setShowSubmitAlert] = useState(false);
     const [newType, setNewType] = useState(false);
@@ -51,6 +40,41 @@ export default function TeaInputForm({
         ratio: currentTea.ratio,
         tags: currentTea.tags
     })
+    
+    function getTypes(){
+        let teaSelection = []
+        teaTypes.forEach((type, index) => {
+            teaSelection.push(
+                <option value={type} key={index}>{type}</option>
+            )
+        })
+        return teaSelection
+    }
+    function getVendors(){
+        let vendorSelection = []
+        vendors.forEach((vendor, index) => {
+            vendorSelection.push(
+                <option value={vendor} key={index}>{vendor}</option>
+            )
+        })
+        return vendorSelection
+    }
+
+    // if (teaTypes){
+    //     console.log(teaTypes)
+    //     teaTypes.forEach((type, index) => {
+    //         teaSelect.push(
+    //             <option value={type} key={index}>{type}</option>
+    //         )
+    //     })
+    // }
+    // if (vendors){
+    //     vendors.forEach((vendor, index) => {
+    //         vendorSelect.push(
+    //             <option value={vendor} key={index}>{vendor}</option>
+    //         )
+    //     })
+    // }
     const [validated, setValidated] = useState(false);
     const handleChange = (event) => {
         setForm({
