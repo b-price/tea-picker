@@ -17,7 +17,7 @@ export const SessionProvider = ({ children }) => {
     const [change, setChange] = useState(false)
     const [pickedSession, setPickedSession] = useState([])
     const {getTea, pickTea} = useTea()
-    const {vessels, getVessel} = useVessels()
+    const {vessels, getVessel, keywordsInVessel} = useVessels()
 
     useEffect(() => {
         axios.get(`${serverRoot}/sessions/?user=${userid}`)
@@ -130,9 +130,9 @@ export const SessionProvider = ({ children }) => {
         setChange(true)
     }
 
-    function getPickedSession(){
-        let pickedTea = pickTea()
-        let pickedVessel = pickedTea.type !== ""? pickVessel(pickedTea.type): vessels[0]
+    function getPickedSession(mood){
+        let pickedTea = pickTea(mood)
+        let pickedVessel = pickedTea.type !== ""? pickVessel(pickedTea.type, mood): vessels[0]
         let amount = pickedVessel.capacity * 0.01 * pickedTea.ratio
         return {
             date: new Date().toJSON().slice(0, 10),
@@ -144,11 +144,17 @@ export const SessionProvider = ({ children }) => {
         }
     }
 
-    function pickVessel(teaType){
+    function pickVessel(teaType, mood){
         const cumulativeWeights = []
         for (let i = 0; i < vessels.length; i++){
             let d, p, f
-            if (teaType in vessels[i].disallowed || vessels[i].exclude)
+            if (
+                teaType in vessels[i].disallowed ||
+                vessels[i].exclude ||
+                (mood &&
+                    ((mood.vessel && mood.vessel != vessels[i]._id) ||
+                        (mood.keywords && !keywordsInVessel(mood.keywords, vessels[i]._id))))
+            )
                 d = 0
             else d = 1
             if (teaType in vessels[i].preferred){

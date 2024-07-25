@@ -15,6 +15,7 @@ export const TeaProvider = ({ children }) => {
 
     const [teaTypes, setTeaTypes] = useState([])
     const [vendors, setVendors] = useState([])
+    const [years, setYears] = useState([])
     const [sortQuery, setSortQuery] = useState("date")
     const [change, setChange] = useState(false)
     const [loading, setLoading] = useState(true)
@@ -26,6 +27,7 @@ export const TeaProvider = ({ children }) => {
                 setTeas(sortTeas(response.data))
                 setTeaTypes([...new Set(response.data.map(tea => tea.type))])
                 setVendors([...new Set(response.data.map(tea => tea.vendor))])
+                setYears([...new Set(response.data.map(tea => tea.year).filter(tea => tea.year !== 0))])
                 setAvRating(getAverageRating())
                 setChange(false)
                 setLoading(false)
@@ -182,10 +184,22 @@ export const TeaProvider = ({ children }) => {
         })
     }
 
-    function pickTea(){
+    function pickTea(mood){
         const cumulativeWeights = []
         for (let i = 0; i < teas.length; i++){
-            cumulativeWeights[i] = getPickWeight(teas[i].quantity, teas[i].rating, teas[i].cost) + (cumulativeWeights[i - 1] || 0)
+            let skip
+            if (
+                mood && (
+                    (mood.type && mood.type !== teas[i].type) ||
+                    (mood.year && mood.year !== teas[i].year) ||
+                    (mood.rating && mood.rating > teas[i].rating) ||
+                    (mood.cost && mood.cost <= teas[i].cost) ||
+                    (mood.keywords && !keywordsInTea(mood.keywords, teas[i]._id))
+                )
+            )
+                skip = 0
+            else skip = 1
+            cumulativeWeights[i] = skip * (getPickWeight(teas[i].quantity, teas[i].rating, teas[i].cost) + (cumulativeWeights[i - 1] || 0))
         }
 
         const maxCumulativeWeight = cumulativeWeights[cumulativeWeights.length - 1]
@@ -209,11 +223,27 @@ export const TeaProvider = ({ children }) => {
         setChange(true)
     }
 
+    function keywordsInTea(keywords, id){
+        const tea = getTea(id)
+        return tea.name.toLowerCase() in keywords ||
+            tea.type.toLowerCase() in keywords ||
+            tea.vendor.toLowerCase() in keywords ||
+            tea.cost.toString() in keywords ||
+            tea.ratio.toString() in keywords ||
+            tea.tags.some(tag => tag.name.toLowerCase() in keywords)
+    }
+
+    function getMaxCost(){
+        let costs = [...new Set(teas.map(tea => tea.cost))]
+        return Math.max(...costs)
+    }
+
     return (
         <TeaContext.Provider value={{
             teas,
             teaTypes,
             vendors,
+            years,
             loading,
             getTea,
             addTea,
@@ -221,6 +251,8 @@ export const TeaProvider = ({ children }) => {
             deleteTea,
             pickTea,
             sortTea,
+            keywordsInTea,
+            getMaxCost
         }}>{children}</TeaContext.Provider>
     )
 }

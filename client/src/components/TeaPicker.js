@@ -216,6 +216,7 @@ export default function TeaPicker(){
                 show={showInTheMoodFor}
                 handleClose={() => setShowInTheMoodFor(false)}
                 openTeaPickedModal={() => openTeaPickedModal()}
+                updatePicked={updatePicked}
             />
         </>
     )

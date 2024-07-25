@@ -1,52 +1,92 @@
-import { Button, Modal, Form, Row, Col, DropdownButton, DropdownItem } from "react-bootstrap";
+import {Button, Modal, Form, Row, Col, DropdownButton, DropdownItem, Alert} from "react-bootstrap";
 import { useState } from "react";
+import {useTea} from "../contexts/TeaContext.js";
+import {useVessels} from "../contexts/VesselContext.js";
+import {useSession} from "../contexts/SessionContext.js";
 
-export default function InTheMoodFor({show, handleClose, openTeaPickedModal}) {
-    const [costSliderValue, setCostSliderValue] = useState(0.5)
-    const [ratingSliderValue, setRatingSliderValue] = useState(8)
-    const [showSavePreset, setShowSavePreset] = useState(false)
-    const maxCost = 2.0
+export default function InTheMoodFor({show, handleClose, openTeaPickedModal, updatePicked}) {
+    const {teaTypes, years, getMaxCost} = useTea()
+    const {vessels} = useVessels()
+    const {getPickedSession} = useSession()
+    const [presets, setPresets] = useState([
+        {id: 0, name: "Preset 0", type: "Oolong", keywords: "", vessel: "", year: 2000, maxCost: 0, minRating: 0}
+    ])
+    const [form, setForm] = useState({
+        id: Math.random() * 10000, name: "", type: teaTypes[0], keywords: "", vessel: vessels[0]._id, year: years[0], maxCost: 0, minRating: 0
+    })
+    const [teaSelect, setTeaSelect] = useState([getTypes()])
+    const [vesselSelect, setVesselSelect] = useState([getVessels()])
+    const [yearSelect, setYearSelect] = useState([getYears()])
+    const [presetSelect, setPresetSelect] = useState([getPresets()])
+    const [presetNaming, setPresetNaming] = useState(false)
+    const [showAlert, setShowAlert] = useState(false)
+    const maxCost = getMaxCost()
     const maxRating = 10
- 
-    const handleCostSliderChange = (e) => {
-        setCostSliderValue(e.target.value)
+    const minRating = 0
+    const handleChange = (event) => {
+        setForm({
+            ...form,
+            [event.target.id]: event.target.value,
+        })
     }
-    const handleRatingSliderChange = (e) => {
-        setRatingSliderValue(e.target.value)
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        updatePicked(getPickedSession(form))
+        openTeaPickedModal()
+        handleClose()
     }
-    function openSavePresetModal() {
-        setShowSavePreset(true)
+    const handleSavePreset = () => {
+        setPresets([...presets, form])
+        console.log(presets)
+        setPresetNaming(false)
+        setShowAlert(true)
+        setTimeout(() => {
+            setShowAlert(false)
+        }, 800)
+    }
+    const onLoadPreset = (preset) => {
+        setForm(preset)
+    }
+    function getTypes(){
+        let teaSelection = []
+        teaTypes.forEach((type, index) => {
+            teaSelection.push(
+                <option value={type} key={index}>{type}</option>
+            )
+        })
+        return teaSelection
     }
 
-    function SavePreset({show, handleClose}) {
-        return(
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Preset Name</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Row>
-                        <Col className="col-5 col-sm-6">
-                            <Form>
-                                <Form.Group controlId="presetName">
-                                    <Form.Control placeholder="Preset 1" />
-                                </Form.Group>
-                            </Form>
-                        </Col>
-                        <Col>
-                            <Button variant="secondary" onClick={handleClose} className="mx-2">
-                                Cancel
-                            </Button>
-                            <Button variant="primary" onClick={handleClose}>
-                                Save
-                            </Button>
-                        </Col>
-                       
-                    </Row>
-                    
-                </Modal.Body>
-            </Modal>
-        )
+    function getVessels(){
+        let vesselSelection = []
+        vessels.forEach(vessel => {
+            vesselSelection.push(
+                <option value={vessel._id} key={vessel._id}>{vessel.name}</option>
+            )
+        })
+        return vesselSelection
+    }
+
+    function getYears(){
+        let yearSelection = []
+        years.forEach((year, index) => {
+            yearSelection.push(
+                <option value={year} key={index}>{year}</option>
+            )
+        })
+        return yearSelection
+    }
+
+
+
+    function getPresets(){
+        let presetSelection = []
+        presets.forEach(preset => {
+            presetSelection.push(
+                <DropdownItem onClick={() => onLoadPreset(preset)}>{preset.name}</DropdownItem>
+            )
+        })
+        return presetSelection
     }
 
     return (
@@ -58,69 +98,105 @@ export default function InTheMoodFor({show, handleClose, openTeaPickedModal}) {
             <Modal.Body>
                 <Form>
                     <Row className="mb-3">
-                        <Form.Group as={Col} controlId="moodTeaType">
+                        {/*Type*/}
+                        <Form.Group as={Col}>
                             <Form.Label>Tea Type</Form.Label>
-                            <Form.Select defaultValue="Green">
-                                <option>Green</option>
-                                <option>White</option>
-                                <option>Oolong</option>
+                            <Form.Select
+                                id={"type"}
+                                onChange={handleChange}
+                                value={form.type}
+                            >
+                                {teaSelect}
                             </Form.Select>
                         </Form.Group>
-                        <Form.Group as={Col} controlId="moodTeaKeyword">
-                            <Form.Label>Keyword</Form.Label>
-                            <Form.Control placeholder="Bing Dao" />
+                        <Form.Group as={Col}>
+                            <Form.Label>Keywords</Form.Label>
+                            <Form.Control
+                                id={"keywords"}
+                                onChange={handleChange}
+                                defaultValue={form.keywords}
+                            />
                         </Form.Group>
                     </Row>
                     <Row className="align-items-end mb-3">
-                        <Form.Group as={Col} controlId="moodVessel">
+                        {/*Vessel*/}
+                        <Form.Group as={Col}>
                             <Form.Label>Vessel</Form.Label>
-                            <Form.Select defaultValue="Large Gaiwan">
-                                <option>Large Gaiwan</option>
-                                <option>Small Gaiwan</option>
-                                <option>Yixing</option>
-                                <option>Kyusu</option>
+                            <Form.Select
+                                id={"vessel"}
+                                onChange={handleChange}
+                                defaultValue={form.vessel}
+                            >
+                                {vesselSelect}
                             </Form.Select>
                         </Form.Group>
+                        {/*Load Preset*/}
                         <Col>
                             <DropdownButton variant="outline-secondary" title="Load Preset">
-                                <DropdownItem>Preset 1</DropdownItem>
-                                <DropdownItem>Preset 2</DropdownItem>
-                                <DropdownItem>Preset 3</DropdownItem>
+                                {presetSelect}
                             </DropdownButton>
                         </Col>
                     </Row>
                     <Row className="align-items-end mb-3">
-                        <Form.Group as={Col} controlId="moodYear">
+                        {/*Year*/}
+                        <Form.Group as={Col}>
                             <Form.Label>Year</Form.Label>
-                            <Form.Select defaultValue="2024">
-                                <option>2024</option>
-                                <option>2023</option>
-                                <option>2022</option>
-                                <option>2020</option>
+                            <Form.Select
+                                id={"year"}
+                                onChange={handleChange}
+                                defaultValue={form.year}
+                            >
+                                {yearSelect}
                             </Form.Select>
                         </Form.Group>
-                        <Col >
-                            <Button variant="outline-primary" onClick={() => openSavePresetModal()}>
-                                Save Preset
-                            </Button>
+                        {/*Save Preset*/}
+                        <Col>
+                            {presetNaming? (
+                                <Row>
+                                    <Form.Label>Preset Name</Form.Label>
+                                    <Form.Group as={Col} className={"col-8"}>
+                                        <Form.Control id={"name"} onChange={handleChange} />
+                                    </Form.Group>
+                                    <Button as={Col} variant="primary" onClick={handleSavePreset} className={"col-4 col-lg-3"}>
+                                        Save
+                                    </Button>
+                                </Row>
+                            ) : (
+                                <>
+                                    <Button
+                                        variant="outline-primary"
+                                        onClick={() => setPresetNaming(true)}
+                                        className={""}
+                                        hidden={showAlert}
+                                    >
+                                        Save Preset
+                                    </Button>
+                                    <Alert  variant="primary" className={"p-2 mb-0 w-75"} show={showAlert}>Preset Saved!</Alert>
+                                </>
+                            )}
+
                         </Col>
                     </Row>
-                    <Form.Group controlId="moodCost">
-                        <Form.Label>Max Cost: ${costSliderValue}/gram</Form.Label>
-                        <Form.Range 
-                            value={costSliderValue} 
-                            onChange={handleCostSliderChange} 
+                    {/*Max Cost*/}
+                    <Form.Group>
+                        <Form.Label>Max Cost: ${form.maxCost}/gram</Form.Label>
+                        <Form.Range
+                            id={"maxCost"}
+                            value={form.maxCost}
+                            onChange={handleChange}
                             min="0.0"
                             max={maxCost}
                             step="0.01"
                         />
                     </Form.Group>
-                    <Form.Group controlId="moodRating">
-                        <Form.Label>Min Rating: {ratingSliderValue}</Form.Label>
-                        <Form.Range 
-                            value={ratingSliderValue} 
-                            onChange={handleRatingSliderChange} 
-                            min="1"
+                    {/*Min Rating*/}
+                    <Form.Group>
+                        <Form.Label>Min Rating: {form.minRating}</Form.Label>
+                        <Form.Range
+                            id={"minRating"}
+                            value={form.minRating}
+                            onChange={handleChange}
+                            min="0"
                             max={maxRating}
                             step="0.5"
                         />
@@ -136,7 +212,6 @@ export default function InTheMoodFor({show, handleClose, openTeaPickedModal}) {
                 </Button>
             </Modal.Footer>
         </Modal>
-        <SavePreset show={showSavePreset} handleClose={() => setShowSavePreset()} />
         </>
     )
 }

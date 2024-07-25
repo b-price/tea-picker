@@ -157,6 +157,14 @@ export const VesselProvider = ({ children }) => {
         setChange(true)
     }
 
+    function keywordsInVessel(keywords, id){
+        const vessel = getVessel(id)
+        return vessel.name.toLowerCase() in keywords ||
+            vessel.type.toLowerCase() in keywords ||
+            vessel.vendor.toLowerCase() in keywords ||
+            vessel.capacity.toString() in keywords;
+    }
+
     return (
         <VesselContext.Provider value={{
             vessels,
@@ -167,7 +175,8 @@ export const VesselProvider = ({ children }) => {
             addVessel,
             editVessel,
             deleteVessel,
-            sortVessels
+            sortVessels,
+            keywordsInVessel
         }}>{children}</VesselContext.Provider>
     )
 }
