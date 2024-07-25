@@ -68,7 +68,7 @@ export const VesselProvider = ({ children }) => {
             type:"",
             capacity:0,
             vendor:"",
-            illegal:[],
+            disallowed:[],
             preferred:[],
             favorite:false,
             exclude:false
@@ -81,7 +81,7 @@ export const VesselProvider = ({ children }) => {
             type:"",
             capacity:0,
             vendor:"",
-            illegal:[],
+            disallowed:[],
             preferred:[],
             favorite:false,
             exclude:false

@@ -95,23 +95,29 @@ export default function TeaPicker(){
                                     <Card.Title>Last Session</Card.Title>
                                 </Col>
                                 <Col>
-                                    <Button variant={"primary"} onClick={() => onNewSession()} className={"float-end me-2 mb-3"}>New Session</Button>
+                                    <Button variant={"primary"} onClick={() => onNewSession()} className={"float-end me-2 mb-3 d-lg-none"}>New Session</Button>
                                 </Col>
                             </Row>
                             <Row>
-                                <Session
-                                    date={sessions[0].date}
-                                    teaName={teaObj.name}
-                                    teaType={teaObj.type}
-                                    teaVendor={teaObj.vendor}
-                                    vesselName={vesselObj.name}
-                                    quantity={sessions[0].quantity}
-                                    rating={sessions[0].rating}
-                                    comments={sessions[0].comments}
-                                    id={sessions[0]._id}
-                                    key={sessions[0]._id}
-                                    buttons={false}
-                                />
+                                <Col>
+                                    <Session
+                                        date={sessions[0].date}
+                                        teaName={teaObj.name}
+                                        teaType={teaObj.type}
+                                        teaVendor={teaObj.vendor}
+                                        vesselName={vesselObj.name}
+                                        quantity={sessions[0].quantity}
+                                        rating={sessions[0].rating}
+                                        comments={sessions[0].comments}
+                                        id={sessions[0]._id}
+                                        key={sessions[0]._id}
+                                        buttons={false}
+                                    />
+                                </Col>
+                                <Col className={"d-none d-lg-inline"}>
+                                    <Button variant={"primary"} onClick={() => onNewSession()} className={""}>New Session</Button>
+                                </Col>
+
                             </Row>
                         </Card.Body>
                     </Card>

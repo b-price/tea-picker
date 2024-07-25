@@ -9,7 +9,7 @@ export default function VesselInputForm({
         type:"",
         capacity:0,
         vendor:"",
-        illegal:[],
+        disallowed:[],
         preferred:[],
         favorite:false,
         exclude:false

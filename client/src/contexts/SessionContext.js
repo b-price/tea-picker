@@ -6,6 +6,7 @@ import {useVessels} from "./VesselContext.js";
 const userid = "666cccp"
 const serverRoot = 'http://localhost:5050';
 const SessionContext = React.createContext()
+const favMode = false
 
 export function useSession() {
     return useContext(SessionContext)
@@ -130,9 +131,8 @@ export const SessionProvider = ({ children }) => {
     }
 
     function getPickedSession(){
-        let randomVessel = Math.floor(Math.random() * vessels.length)
         let pickedTea = pickTea()
-        let pickedVessel = vessels[randomVessel]
+        let pickedVessel = pickedTea.type !== ""? pickVessel(pickedTea.type): vessels[0]
         let amount = pickedVessel.capacity * 0.01 * pickedTea.ratio
         return {
             date: new Date().toJSON().slice(0, 10),
@@ -141,6 +141,37 @@ export const SessionProvider = ({ children }) => {
             vessel: pickedVessel._id,
             rating: 0,
             comments: "",
+        }
+    }
+
+    function pickVessel(teaType){
+        const cumulativeWeights = []
+        for (let i = 0; i < vessels.length; i++){
+            let d, p, f
+            if (teaType in vessels[i].disallowed || vessels[i].exclude)
+                d = 0
+            else d = 1
+            if (teaType in vessels[i].preferred){
+                p = 3
+            } else p = 1
+            if (vessels[i].favorite){
+                if (favMode)
+                    f = 1
+                else f = 1.5
+            } else if (favMode)
+                f = 0
+            else f = 1
+            cumulativeWeights[i] = p * d * f + (cumulativeWeights[i - 1] || 0)
+        }
+        console.log(cumulativeWeights)
+        const maxCumulativeWeight = cumulativeWeights[cumulativeWeights.length - 1]
+        const randomNumber = maxCumulativeWeight * Math.random()
+        console.log(randomNumber)
+
+        for (let itemIndex = 0; itemIndex < vessels.length; itemIndex += 1) {
+            if (cumulativeWeights[itemIndex] >= randomNumber) {
+                return vessels[itemIndex]
+            }
         }
     }
 
