@@ -12,9 +12,10 @@ import {useTea} from "../contexts/TeaContext.js";
 import Edit from "./Edit.js";
 
 export default function TeaPicker(){
+    const {getTea, addTea, loading} = useTea()
     const {sessions, addSession} = useSession()
     const {getVessel, addVessel} = useVessels()
-    const {getTea, addTea} = useTea()
+
     const [showPickTea, setShowPickTea] = useState(false)
     const [showAddTea, setShowAddTea] = useState(false)
     const [showAddVessel, setShowAddVessel] = useState(false)
@@ -64,6 +65,57 @@ export default function TeaPicker(){
         }
     }
 
+    if (loading){
+        return (
+            <Container>
+                <Row xs={2} md={4} lg={8}>
+                    <Col className="align-self-center text-center">
+                        <Button variant="primary" size="lg" onClick={null} className="alig">
+                            Loading!
+                        </Button>
+                    </Col>
+                    <Col xs lg="2">
+                        <Stack gap="2">
+                            <Button variant="outline-primary" onClick={null}>
+                                Teas
+                            </Button>
+                            <Button variant="outline-primary" onClick={null}>
+                                Vessels
+                            </Button>
+                            <Button variant="outline-primary" onClick={null}>
+                                Sessions
+                            </Button>
+                        </Stack>
+                    </Col>
+                </Row>
+                <Row className="py-5">
+                    <Card >
+                        <Card.Body>
+                            <Row className={"align-items-center"}>
+                                <Col>
+                                    <Card.Title>Last Session</Card.Title>
+                                </Col>
+                                <Col>
+                                    <Button variant={"primary"} onClick={null} className={"float-end me-2 mb-3 d-lg-none"}>New Session</Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+
+                                </Col>
+                                <Col className={"d-none d-lg-inline"}>
+                                    <Button variant={"primary"} onClick={null} className={""}>New Session</Button>
+                                </Col>
+
+                            </Row>
+                        </Card.Body>
+                    </Card>
+
+                </Row>
+
+            </Container>
+        )
+    }
     return (
         <>
             <Container>

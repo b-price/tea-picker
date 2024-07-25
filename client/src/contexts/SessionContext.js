@@ -163,11 +163,8 @@ export const SessionProvider = ({ children }) => {
             else f = 1
             cumulativeWeights[i] = p * d * f + (cumulativeWeights[i - 1] || 0)
         }
-        console.log(cumulativeWeights)
         const maxCumulativeWeight = cumulativeWeights[cumulativeWeights.length - 1]
         const randomNumber = maxCumulativeWeight * Math.random()
-        console.log(randomNumber)
-
         for (let itemIndex = 0; itemIndex < vessels.length; itemIndex += 1) {
             if (cumulativeWeights[itemIndex] >= randomNumber) {
                 return vessels[itemIndex]

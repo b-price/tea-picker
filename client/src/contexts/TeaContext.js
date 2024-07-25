@@ -17,6 +17,8 @@ export const TeaProvider = ({ children }) => {
     const [vendors, setVendors] = useState([])
     const [sortQuery, setSortQuery] = useState("date")
     const [change, setChange] = useState(false)
+    const [loading, setLoading] = useState(true)
+    const [avRating, setAvRating] = useState(7)
 
     useEffect(() => {
         axios.get(`${serverRoot}/teas/?user=${userid}`)
@@ -24,7 +26,9 @@ export const TeaProvider = ({ children }) => {
                 setTeas(sortTeas(response.data))
                 setTeaTypes([...new Set(response.data.map(tea => tea.type))])
                 setVendors([...new Set(response.data.map(tea => tea.vendor))])
+                setAvRating(getAverageRating())
                 setChange(false)
+                setLoading(false)
                 console.log("refresh")
 
             })
@@ -83,6 +87,19 @@ export const TeaProvider = ({ children }) => {
         ratio: 4.5,
         tags: []
     }])
+
+
+    function getAverageRating(){
+        let ratedTeas = teas.filter(tea => tea.rating > 0)
+            .map(tea => +tea.rating)
+        let total = ratedTeas.reduce((a, b) => a + b, 0)
+        // console.log("ratings: "+ratedTeas)
+        // console.log("total: "+total)
+        // console.log("length: "+ratedTeas.length)
+        // console.log(total/ratedTeas.length)
+        return total/ratedTeas.length
+    }
+
     function getTea(id){
         let notFound = {
             name: "",
@@ -170,21 +187,21 @@ export const TeaProvider = ({ children }) => {
         for (let i = 0; i < teas.length; i++){
             cumulativeWeights[i] = getPickWeight(teas[i].quantity, teas[i].rating, teas[i].cost) + (cumulativeWeights[i - 1] || 0)
         }
-        //console.log(cumulativeWeights)
+
         const maxCumulativeWeight = cumulativeWeights[cumulativeWeights.length - 1]
         const randomNumber = maxCumulativeWeight * Math.random()
-        console.log(randomNumber)
 
         for (let itemIndex = 0; itemIndex < teas.length; itemIndex += 1) {
             if (cumulativeWeights[itemIndex] >= randomNumber) {
               return teas[itemIndex]
             }
         }
-
     }
 
     function getPickWeight(quantity, rating, cost){
-        return Math.sqrt((QUANTITY_RATING_COEFF * quantity * rating)/(Math.pow(cost + 1, 2) * COST_COEFF))
+        let adjRating = rating === 0? getAverageRating(): rating
+        let denom = cost === 0? 1: (Math.pow(cost, 2) * COST_COEFF)
+        return Math.sqrt((QUANTITY_RATING_COEFF * quantity * adjRating)/denom)
     }
 
     function sortTea(attribute){
@@ -197,12 +214,13 @@ export const TeaProvider = ({ children }) => {
             teas,
             teaTypes,
             vendors,
+            loading,
             getTea,
             addTea,
             editTea,
             deleteTea,
             pickTea,
-            sortTea
+            sortTea,
         }}>{children}</TeaContext.Provider>
     )
 }

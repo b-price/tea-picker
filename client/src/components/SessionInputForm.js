@@ -61,6 +61,7 @@ export default function SessionInputForm({
     }
     const [showErrorAlert, setShowErrorAlert] = useState(false);
     const [showSubmitAlert, setShowSubmitAlert] = useState(false);
+    //TODO: After adding a new vessel or tea, the old latest tea or vessel is still selected, should select the added one
     const [form, setForm] = useState({
         date: currentSession.date,
         tea: currentSession.tea === ""? teas[0]._id: currentSession.tea,
