@@ -12,7 +12,8 @@ export default function VesselInputForm({
         disallowed:[],
         preferred:[],
         favorite:false,
-        exclude:false
+        exclude:false,
+        _date: new Date().toJSON()
     },
     isEdit=false,
     submit,
@@ -59,6 +60,7 @@ export default function VesselInputForm({
         exclude: currentVessel.exclude,
         disallowed: currentVessel.disallowed,
         preferred: currentVessel.preferred,
+        _date: currentVessel._date
     })
 
     const [validated, setValidated] = useState(false);

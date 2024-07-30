@@ -24,6 +24,12 @@ export default function Sessions(){
     function openAddVesselModal() {
         setShowAddVessel(true)
     }
+    function onAddTea(tea){
+
+    }
+    function onAddVessel(vessel){
+
+    }
 
     let rows = []
     if (sessions){

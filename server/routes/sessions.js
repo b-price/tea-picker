@@ -45,6 +45,7 @@ router.post("/", async (req, res) => {
             quantity: req.body.quantity,
             rating: req.body.rating,
             comments: req.body.comments,
+            _date: req.body._date,
         };
         let collection = await db.collection("sessions");
         let result = await collection.insertOne(newDocument);
@@ -67,6 +68,7 @@ router.patch("/:id", async (req, res) => {
                 quantity: req.body.quantity,
                 rating: req.body.rating,
                 comments: req.body.comments,
+                _date: req.body._date,
             },
         };
 

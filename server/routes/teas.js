@@ -49,6 +49,7 @@ router.post("/", async (req, res) => {
       rating: req.body.rating,
       ratio: req.body.ratio,
       tags: req.body.tags,
+      _date: req.body._date,
     };
     let collection = await db.collection("teas");
     let result = await collection.insertOne(newDocument);
@@ -74,6 +75,7 @@ router.patch("/:id", async (req, res) => {
         rating: req.body.rating,
         ratio: req.body.ratio,
         tags: req.body.tags,
+        _date: req.body._date,
       },
     };
 

@@ -11,6 +11,7 @@ export default function SessionInputForm({
         vessel:"",
         rating:0,
         comments:"",
+        _date: new Date().toJSON()
     },
     isEdit = false,
     submit,
@@ -64,19 +65,29 @@ export default function SessionInputForm({
     //TODO: After adding a new vessel or tea, the old latest tea or vessel is still selected, should select the added one
     const [form, setForm] = useState({
         date: currentSession.date,
-        tea: currentSession.tea === ""? teas[0]._id: currentSession.tea,
-        vessel: currentSession.vessel === ""? vessels[0]._id: currentSession.vessel,
+        tea: currentSession.tea !== "" || teas.length < 1? currentSession.tea : teas[0]._id,
+        vessel: currentSession.vessel !== "" || vessels.length < 1? currentSession.vessel : vessels[0]._id,
         quantity: currentSession.quantity,
         rating: currentSession.rating,
         comments: currentSession.comments,
+        _date: currentSession._date
     })
 
     const [validated, setValidated] = useState(false);
     const handleChange = (event) => {
-        console.log(event);
+        console.log(event.target.value);
         setForm({
             ...form,
             [event.target.id]: event.target.value,
+        })
+    }
+    const handleDate = (event) => {
+        let date = new Date(event.target.value).toJSON()
+        console.log(date)
+        setForm({
+            ...form,
+            date: event.target.value,
+            _date: date
         })
     }
     let buttonText = isEdit? "Edit Session" : "Add Session"
@@ -117,19 +128,20 @@ export default function SessionInputForm({
                         type={"date"}
                         required
                         id={"date"}
-                        onChange={handleChange}
+                        onChange={handleDate}
                         isInvalid={form.date === undefined || form.date === ""}
                         defaultValue={form.date}
                     />
                 </Form.Group>
                 {/*Tea*/}
-                <Form.Group as={Col}>
+                <Form.Group as={Col} hasValidation>
                     <Form.Label>Tea</Form.Label>
                     <Form.Select
                         required
                         id={"tea"}
                         onChange={handleChange}
                         defaultValue={form.tea}
+                        isInvalid={form.tea === ""}
                     >
                         {teaSelect}
                     </Form.Select>

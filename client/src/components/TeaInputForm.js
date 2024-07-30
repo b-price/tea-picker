@@ -15,7 +15,8 @@ export default function TeaInputForm({
         year: 0,
         rating: 0,
         ratio: defaultRatio,
-        tags: []
+        tags: [],
+        _date: new Date().toJSON()
     },
     isEdit=false,
     submit,
@@ -41,7 +42,8 @@ export default function TeaInputForm({
         year: currentTea.year,
         rating: currentTea.rating,
         ratio: currentTea.ratio,
-        tags: currentTea.tags
+        tags: currentTea.tags,
+        _date: currentTea._date
     })
     
     function getTypes(){

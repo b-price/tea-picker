@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, {useContext, useEffect, useState} from "react";
 
-const userid = "666cccp"
+const userid = "777"
 const serverRoot = 'http://localhost:5050';
 const TeaContext = React.createContext()
 const QUANTITY_RATING_COEFF = 17
@@ -87,7 +87,9 @@ export const TeaProvider = ({ children }) => {
         year: 0,
         rating: 0,
         ratio: 4.5,
-        tags: []
+        tags: [],
+        _date: new Date().toJSON(),
+        _id: "asdf"
     }])
 
 

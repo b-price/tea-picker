@@ -3,7 +3,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {useTea} from "./TeaContext.js";
 import {useVessels} from "./VesselContext.js";
 
-const userid = "666cccp"
+const userid = "777"
 const serverRoot = 'http://localhost:5050';
 const SessionContext = React.createContext()
 const favMode = false
@@ -23,6 +23,7 @@ export const SessionProvider = ({ children }) => {
         axios.get(`${serverRoot}/sessions/?user=${userid}`)
             .then((response) => {
                 setSessions(sortSessions(response.data))
+                console.log(response.data)
                 setChange(false)
                 setSessionLoading(false)
             }).catch(error => {

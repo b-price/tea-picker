@@ -101,6 +101,7 @@ export default function TeaPicker(){
             teaObj = getTea(sessions[0].tea)
         } catch(e) {
             console.log(e)
+            console.log(sessions)
         }
     }
 
@@ -191,19 +192,24 @@ export default function TeaPicker(){
                             </Row>
                             <Row>
                                 <Col>
-                                    <Session
-                                        date={sessions[0].date}
-                                        teaName={teaObj.name}
-                                        teaType={teaObj.type}
-                                        teaVendor={teaObj.vendor}
-                                        vesselName={vesselObj.name}
-                                        quantity={sessions[0].quantity}
-                                        rating={sessions[0].rating}
-                                        comments={sessions[0].comments}
-                                        id={sessions[0]._id}
-                                        key={sessions[0]._id}
-                                        buttons={false}
-                                    />
+                                    {sessions.length > 0?(
+                                        <Session
+                                            date={sessions[0].date}
+                                            teaName={teaObj.name}
+                                            teaType={teaObj.type}
+                                            teaVendor={teaObj.vendor}
+                                            vesselName={vesselObj.name}
+                                            quantity={sessions[0].quantity}
+                                            rating={sessions[0].rating}
+                                            comments={sessions[0].comments}
+                                            id={sessions[0]._id}
+                                            key={sessions[0]._id}
+                                            buttons={false}
+                                        />
+                                    ) : (
+                                        <p>No Sessions!</p>
+                                    )}
+
                                 </Col>
                                 <Col className={"d-none d-lg-inline"}>
                                     <Button variant={"primary"} onClick={() => onNewSession()} className={""}>New Session</Button>
@@ -247,7 +253,8 @@ export default function TeaPicker(){
             <Add
                 show={showNewSession}
                 handleClose={() => setShowNewSession(false)}
-                openAddTeaModal={openAddSessionModal}
+                add={addSession}
+                openAddTeaModal={openAddTeaModal}
                 openAddVesselModal={openAddVesselModal}
                 type={"session"}
                 current={lastSession}

@@ -48,6 +48,7 @@ router.post("/", async (req, res) => {
             exclude: req.body.exclude,
             disallowed: req.body.disallowed,
             preferred: req.body.preferred,
+            _date: req.body._date,
         };
         let collection = await db.collection("vessels");
         let result = await collection.insertOne(newDocument);
@@ -72,6 +73,7 @@ router.patch("/:id", async (req, res) => {
                 exclude: req.body.exclude,
                 disallowed: req.body.disallowed,
                 preferred: req.body.preferred,
+                _date: req.body._date,
             },
         };
 
