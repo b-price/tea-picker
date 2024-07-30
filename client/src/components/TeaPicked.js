@@ -4,27 +4,19 @@ import {useSession} from "../contexts/SessionContext.js";
 import {useState} from "react";
 import {useTea} from "../contexts/TeaContext.js";
 import {useVessels} from "../contexts/VesselContext.js";
-import {useNavigate} from "react-router-dom";
 
 export default function TeaPicked(props){
-    const {getPickedSession, addSession} = useSession()
+    const {pickedSession} = useSession()
     const {getTea} = useTea()
     const {getVessel} = useVessels()
-    const [pickedSession, setPickedSession] = useState(getPickedSession())
     const [showAlert, setShowAlert] = useState(false)
-    const navigate = useNavigate()
     function onAdd(){
-        addSession(pickedSession)
+        props.onAddPicked()
         setShowAlert(true)
         setTimeout(() => {
-            navigate("/sessions")
             setShowAlert(false)
             props.handleClose()
         }, 800)
-    }
-    function onEdit(){
-        props.updatePicked(pickedSession)
-        props.openAddSessionModal()
     }
     return (
         <Modal show={props.show} onHide={props.handleClose} size="lg">
@@ -51,10 +43,10 @@ export default function TeaPicked(props){
                 <Button variant="success" onClick={() => onAdd()}>
                     Add to Sessions
                 </Button>
-                <Button variant="outline-primary" onClick={() => onEdit()}>
+                <Button variant="outline-primary" onClick={() => props.onEditPicked()}>
                     Edit
                 </Button>
-                <Button variant="outline-primary" onClick={() => setPickedSession(getPickedSession())}>
+                <Button variant="outline-primary" onClick={() => props.onTryAgain()}>
                     Try Again
                 </Button>
             </Modal.Footer>

@@ -1,14 +1,6 @@
 import { Modal, Button, Stack } from 'react-bootstrap'
 
 export default function PickTea(props) {
-    function onHitMe() {
-        props.handleClose()
-        props.openTeaPickedModal()
-    }
-    function onMoodFor(){
-        props.handleClose()
-        props.openInTheMoodForModal()
-    }
     return (
         <>
             <Modal show={props.show} onHide={props.handleClose} size="sm">
@@ -17,14 +9,13 @@ export default function PickTea(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <Stack gap="4">
-                        <Button variant="primary" size="lg" onClick={() => onHitMe()}>
+                        <Button variant="primary" size="lg" onClick={() => props.onHitMe()}>
                             Hit me!
                         </Button>
-                        <Button variant="primary" onClick={() => onMoodFor()}>
+                        <Button variant="primary" onClick={() => props.onMoodFor()}>
                             I'm in the mood for...
                         </Button>
                     </Stack>
-                    
                 </Modal.Body>
                 <Modal.Footer>
                 <Button variant="secondary" onClick={props.handleClose}>

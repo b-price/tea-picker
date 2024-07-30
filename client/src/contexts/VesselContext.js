@@ -16,6 +16,7 @@ export const VesselProvider = ({ children }) => {
     const [vesselTypes, setVesselTypes] = useState([])
     const [change, setChange] = useState(false)
     const [sortQuery, setSortQuery] = useState("date")
+    const [vesselLoading, setVesselLoading] = useState(true)
 
     useEffect(() => {
         axios.get(`${serverRoot}/vessels/?user=${userid}`)
@@ -24,6 +25,7 @@ export const VesselProvider = ({ children }) => {
                 setVesselTypes([...new Set(response.data.map(vessel => vessel.type))])
                 setVendors([...new Set(response.data.map(vessel => vessel.vendor))])
                 setChange(false)
+                setVesselLoading(false)
             }).catch(error => {
             if (error.response) {
                 console.log("Error with response: " + error.response)
@@ -159,10 +161,10 @@ export const VesselProvider = ({ children }) => {
 
     function keywordsInVessel(keywords, id){
         const vessel = getVessel(id)
-        return vessel.name.toLowerCase() in keywords ||
-            vessel.type.toLowerCase() in keywords ||
-            vessel.vendor.toLowerCase() in keywords ||
-            vessel.capacity.toString() in keywords;
+        return vessel.name.toLowerCase().split(" ").some(word => keywords.includes(word)) ||
+            vessel.type.toLowerCase().split(" ").some(word => keywords.includes(word)) ||
+            vessel.vendor.toLowerCase().split(" ").some(word => keywords.includes(word)) ||
+            keywords.includes(vessel.capacity.toString());
     }
 
     return (
@@ -171,6 +173,7 @@ export const VesselProvider = ({ children }) => {
             teaTypes,
             vendors,
             vesselTypes,
+            vesselLoading,
             getVessel,
             addVessel,
             editVessel,

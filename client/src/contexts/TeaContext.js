@@ -18,7 +18,7 @@ export const TeaProvider = ({ children }) => {
     const [years, setYears] = useState([])
     const [sortQuery, setSortQuery] = useState("date")
     const [change, setChange] = useState(false)
-    const [loading, setLoading] = useState(true)
+    const [teaLoading, setTeaLoading] = useState(true)
     const [avRating, setAvRating] = useState(7)
 
     useEffect(() => {
@@ -30,7 +30,7 @@ export const TeaProvider = ({ children }) => {
                 setYears([...new Set(response.data.map(tea => tea.year).filter(tea => tea.year !== 0))])
                 setAvRating(getAverageRating())
                 setChange(false)
-                setLoading(false)
+                setTeaLoading(false)
                 console.log("refresh")
 
             })
@@ -186,28 +186,39 @@ export const TeaProvider = ({ children }) => {
 
     function pickTea(mood){
         const cumulativeWeights = []
+        if (mood) {
+            //console.log("year:", mood.year)
+        }
+
         for (let i = 0; i < teas.length; i++){
+            //if (mood.year === teas[i].year) console.log(teas[i].year)
             let skip
             if (
                 mood && (
                     (mood.type && mood.type !== teas[i].type) ||
-                    (mood.year && mood.year !== teas[i].year) ||
-                    (mood.rating && mood.rating > teas[i].rating) ||
-                    (mood.cost && mood.cost <= teas[i].cost) ||
-                    (mood.keywords && !keywordsInTea(mood.keywords, teas[i]._id))
+                    (mood.year != 0 && mood.year != teas[i].year) ||
+                    (mood.minRating !== 0 && mood.minRating > teas[i].rating) ||
+                    (mood.maxCost && mood.maxCost <= teas[i].cost) ||
+                    (mood.keywords.length !== 0 && !keywordsInTea(mood.keywords, teas[i]._id))
                 )
-            )
+            ){
                 skip = 0
-            else skip = 1
+            } else {
+                skip = 1
+            }
             cumulativeWeights[i] = skip * (getPickWeight(teas[i].quantity, teas[i].rating, teas[i].cost) + (cumulativeWeights[i - 1] || 0))
+            //console.log(teas[i].name + ": " + teas[i].type + ": w: " + cumulativeWeights[i] + " s:" + skip)
         }
-
-        const maxCumulativeWeight = cumulativeWeights[cumulativeWeights.length - 1]
+        const maxCumulativeWeight = Math.max(...cumulativeWeights)
+        console.log("max cum: "+maxCumulativeWeight)
+        if (maxCumulativeWeight === 0)
+            return "tea not found"
         const randomNumber = maxCumulativeWeight * Math.random()
-
+        console.log("randomNumber:", randomNumber)
         for (let itemIndex = 0; itemIndex < teas.length; itemIndex += 1) {
             if (cumulativeWeights[itemIndex] >= randomNumber) {
-              return teas[itemIndex]
+                console.log("tea pick: " + teas[itemIndex].name)
+                return teas[itemIndex]
             }
         }
     }
@@ -225,12 +236,13 @@ export const TeaProvider = ({ children }) => {
 
     function keywordsInTea(keywords, id){
         const tea = getTea(id)
-        return tea.name.toLowerCase() in keywords ||
-            tea.type.toLowerCase() in keywords ||
-            tea.vendor.toLowerCase() in keywords ||
-            tea.cost.toString() in keywords ||
-            tea.ratio.toString() in keywords ||
-            tea.tags.some(tag => tag.name.toLowerCase() in keywords)
+        //console.log(tea.tags)
+        return tea.name.toLowerCase().split(" ").some(word => keywords.includes(word)) ||
+            tea.type.toLowerCase().split(" ").some(word => keywords.includes(word)) ||
+            tea.vendor.toLowerCase().split(" ").some(word => keywords.includes(word)) ||
+            keywords.includes(tea.cost.toString()) ||
+            keywords.includes(tea.ratio.toString()) ||
+            tea.tags.some(tag => keywords.includes(tag.toLowerCase()))
     }
 
     function getMaxCost(){
@@ -244,7 +256,7 @@ export const TeaProvider = ({ children }) => {
             teaTypes,
             vendors,
             years,
-            loading,
+            teaLoading,
             getTea,
             addTea,
             editTea,

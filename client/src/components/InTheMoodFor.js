@@ -2,17 +2,16 @@ import {Button, Modal, Form, Row, Col, DropdownButton, DropdownItem, Alert} from
 import { useState } from "react";
 import {useTea} from "../contexts/TeaContext.js";
 import {useVessels} from "../contexts/VesselContext.js";
-import {useSession} from "../contexts/SessionContext.js";
 
-export default function InTheMoodFor({show, handleClose, openTeaPickedModal, updatePicked}) {
+export default function InTheMoodFor(props) {
     const {teaTypes, years, getMaxCost} = useTea()
     const {vessels} = useVessels()
-    const {getPickedSession} = useSession()
+    //TODO: get/save presets from user settings
     const [presets, setPresets] = useState([
-        {id: 0, name: "Preset 0", type: "Oolong", keywords: "", vessel: "", year: 2000, maxCost: 0, minRating: 0}
+        {id: 0, name: "Preset 0", type: "Oolong", keywords: [], vessel: "", year: 2000, maxCost: getMaxCost(), minRating: 0}
     ])
     const [form, setForm] = useState({
-        id: Math.random() * 10000, name: "", type: teaTypes[0], keywords: "", vessel: vessels[0]._id, year: years[0], maxCost: 0, minRating: 0
+        id: Math.random() * 10000, name: "", type: undefined, keywords: [], vessel: undefined, year: 0, maxCost: getMaxCost(), minRating: 0
     })
     const [teaSelect, setTeaSelect] = useState([getTypes()])
     const [vesselSelect, setVesselSelect] = useState([getVessels()])
@@ -20,22 +19,61 @@ export default function InTheMoodFor({show, handleClose, openTeaPickedModal, upd
     const [presetSelect, setPresetSelect] = useState([getPresets()])
     const [presetNaming, setPresetNaming] = useState(false)
     const [showAlert, setShowAlert] = useState(false)
+    const [showErrorAlert, setShowErrorAlert] = useState(false)
     const maxCost = getMaxCost()
     const maxRating = 10
     const minRating = 0
     const handleChange = (event) => {
         setForm({
             ...form,
-            [event.target.id]: event.target.value,
+            [event.target.id]: event.target.value === "Any"? undefined : event.target.value
+        })
+    }
+    const handleKeywords = (event) => {
+        const splitChars = /[\s,]/
+        let value = event.target.value.toLocaleLowerCase().split(splitChars)
+        console.log("Keywords: " + value)
+        if (value[0] === "" && value.length === 1) {
+            value = []
+        }
+        setForm({
+            ...form,
+            [event.target.id]: value,
         })
     }
     const handleSubmit = (event) => {
         event.preventDefault()
-        updatePicked(getPickedSession(form))
-        openTeaPickedModal()
-        handleClose()
+        if (!props.onPickWithMood(form)){
+            setShowErrorAlert(true)
+            setTimeout(() => {
+                setShowErrorAlert(false)
+            }, 2000)
+        }
+        // if (!pickSession(form)){
+        //     setShowErrorAlert(true)
+        //     setTimeout(() => {
+        //         setShowErrorAlert(false)
+        //     }, 2000)
+        // } else {
+        //     openTeaPickedModal()
+        //     handleClose()
+        // }
+        // let pick = getPickedSession(form)
+        // console.log("pick: " + pick.tea + ", " + pick.vessel)
+        // if (pick === "tea not found"){
+        //     setShowErrorAlert(true)
+        //     setTimeout(() => {
+        //         setShowErrorAlert(false)
+        //     }, 2000)
+        // } else {
+        //     updatePicked(pick)
+        //     openTeaPickedModal()
+        //     handleClose()
+        // }
+
     }
     const handleSavePreset = () => {
+        console.log(form)
         setPresets([...presets, form])
         console.log(presets)
         setPresetNaming(false)
@@ -48,7 +86,7 @@ export default function InTheMoodFor({show, handleClose, openTeaPickedModal, upd
         setForm(preset)
     }
     function getTypes(){
-        let teaSelection = []
+        let teaSelection = [<option value={undefined} key={-1}>Any</option>]
         teaTypes.forEach((type, index) => {
             teaSelection.push(
                 <option value={type} key={index}>{type}</option>
@@ -58,7 +96,7 @@ export default function InTheMoodFor({show, handleClose, openTeaPickedModal, upd
     }
 
     function getVessels(){
-        let vesselSelection = []
+        let vesselSelection = [<option value={undefined} key={-1}>Any</option>]
         vessels.forEach(vessel => {
             vesselSelection.push(
                 <option value={vessel._id} key={vessel._id}>{vessel.name}</option>
@@ -68,7 +106,7 @@ export default function InTheMoodFor({show, handleClose, openTeaPickedModal, upd
     }
 
     function getYears(){
-        let yearSelection = []
+        let yearSelection = [<option value={0} key={-1}>Any</option>]
         years.forEach((year, index) => {
             yearSelection.push(
                 <option value={year} key={index}>{year}</option>
@@ -76,8 +114,6 @@ export default function InTheMoodFor({show, handleClose, openTeaPickedModal, upd
         })
         return yearSelection
     }
-
-
 
     function getPresets(){
         let presetSelection = []
@@ -91,7 +127,7 @@ export default function InTheMoodFor({show, handleClose, openTeaPickedModal, upd
 
     return (
         <>
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={props.show} onHide={props.handleClose}>
             <Modal.Header closeButton>
                 <Modal.Title>I'm in the mood for...</Modal.Title>
             </Modal.Header>
@@ -109,12 +145,13 @@ export default function InTheMoodFor({show, handleClose, openTeaPickedModal, upd
                                 {teaSelect}
                             </Form.Select>
                         </Form.Group>
+                        {/*Keywords*/}
                         <Form.Group as={Col}>
                             <Form.Label>Keywords</Form.Label>
                             <Form.Control
                                 id={"keywords"}
-                                onChange={handleChange}
-                                defaultValue={form.keywords}
+                                onChange={handleKeywords}
+                                value={form.keywords}
                             />
                         </Form.Group>
                     </Row>
@@ -125,7 +162,7 @@ export default function InTheMoodFor({show, handleClose, openTeaPickedModal, upd
                             <Form.Select
                                 id={"vessel"}
                                 onChange={handleChange}
-                                defaultValue={form.vessel}
+                                value={form.vessel === undefined? "Any": form.vessel}
                             >
                                 {vesselSelect}
                             </Form.Select>
@@ -144,7 +181,7 @@ export default function InTheMoodFor({show, handleClose, openTeaPickedModal, upd
                             <Form.Select
                                 id={"year"}
                                 onChange={handleChange}
-                                defaultValue={form.year}
+                                value={form.year}
                             >
                                 {yearSelect}
                             </Form.Select>
@@ -196,7 +233,7 @@ export default function InTheMoodFor({show, handleClose, openTeaPickedModal, upd
                             id={"minRating"}
                             value={form.minRating}
                             onChange={handleChange}
-                            min="0"
+                            min={minRating}
                             max={maxRating}
                             step="0.5"
                         />
@@ -204,10 +241,11 @@ export default function InTheMoodFor({show, handleClose, openTeaPickedModal, upd
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+                <Alert variant={"danger"} className={"p-2 mb-0"} show={showErrorAlert}>No matching teas found!</Alert>
+                <Button variant="secondary" onClick={props.handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={() => openTeaPickedModal()}>
+                <Button variant="primary" type={"submit"} onClick={handleSubmit}>
                     Pick Tea!
                 </Button>
             </Modal.Footer>

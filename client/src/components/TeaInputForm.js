@@ -2,6 +2,9 @@ import {Form, Row, Col, InputGroup, Button, Alert} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import {useTea} from "../contexts/TeaContext.js";
 
+//TODO: get default ratio from user settings
+const defaultRatio = 4.5
+
 export default function TeaInputForm({
     currentTea={
         name: "",
@@ -11,7 +14,7 @@ export default function TeaInputForm({
         cost: 0,
         year: 0,
         rating: 0,
-        ratio: 4.5,
+        ratio: defaultRatio,
         tags: []
     },
     isEdit=false,

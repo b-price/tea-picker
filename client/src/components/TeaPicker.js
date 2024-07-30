@@ -9,12 +9,11 @@ import Add from "./Add.js";
 import {useSession} from "../contexts/SessionContext.js";
 import {useVessels} from "../contexts/VesselContext.js";
 import {useTea} from "../contexts/TeaContext.js";
-import Edit from "./Edit.js";
 
 export default function TeaPicker(){
-    const {getTea, addTea, loading} = useTea()
-    const {sessions, addSession} = useSession()
-    const {getVessel, addVessel} = useVessels()
+    const {getTea, addTea, teaLoading} = useTea()
+    const {sessions, addSession, sessionLoading, pickSession, pickedSession} = useSession()
+    const {getVessel, addVessel, vesselLoading} = useVessels()
 
     const [showPickTea, setShowPickTea] = useState(false)
     const [showAddTea, setShowAddTea] = useState(false)
@@ -22,8 +21,12 @@ export default function TeaPicker(){
     const [showAddSession, setShowAddSession] = useState(false)
     const [showTeaPicked, setShowTeaPicked] = useState(false)
     const [showInTheMoodFor, setShowInTheMoodFor] = useState(false)
+    const [showNewSession, setShowNewSession] = useState(false)
+    const [isMoodPick, setIsMoodPick] = useState(false)
+    const [mood, setMood] = useState({})
+    const [showAlert, setShowAlert] = useState(false)
     const navigate = useNavigate()
-    const [pickedSession, setPickedSession] = useState()
+    const [lastSession, setLastSession] = useState(sessions[0])
 
     function handlePage(path) {
         navigate(path)
@@ -46,12 +49,48 @@ export default function TeaPicker(){
     function openInTheMoodForModal() {
         setShowInTheMoodFor(true)
     }
-    function updatePicked(session){
-        setPickedSession(session)
+    function updatePicked(moodOption){
+        pickSession(moodOption)
     }
+    function getPicked(){
+        return pickedSession
+    }
+
+    // Button Functions
     function onNewSession(){
-        updatePicked({...sessions[0], date: new Date().toJSON().slice(0, 10)})
+        //updatePicked({...sessions[0], date: new Date().toJSON().slice(0, 10)})
+        setLastSession(sessions[0])
+        setShowNewSession(true)
+    }
+    function onHitMe(){
+        setIsMoodPick(false)
+        updatePicked()
+        setShowPickTea(false)
+        setShowTeaPicked(true)
+    }
+    function onMoodFor(){
+        setShowPickTea(false)
+        setShowInTheMoodFor(true)
+    }
+    function onAddPicked(){
+        addSession(pickedSession)
+    }
+    function onEditPicked(){
         setShowAddSession(true)
+    }
+    function onTryAgain(){
+        updatePicked(isMoodPick? mood: null)
+    }
+    function onPickWithMood(moodForm){
+        if (!pickSession(moodForm)){
+            return false
+        } else {
+            setMood(moodForm)
+            setIsMoodPick(true)
+            setShowInTheMoodFor(false)
+            setShowTeaPicked(true)
+            return true
+        }
     }
 
     let teaObj = {name: "", type: "", vendor: ""}
@@ -65,7 +104,7 @@ export default function TeaPicker(){
         }
     }
 
-    if (loading){
+    if (teaLoading || vesselLoading || sessionLoading){
         return (
             <Container>
                 <Row xs={2} md={4} lg={8}>
@@ -180,8 +219,8 @@ export default function TeaPicker(){
             <PickTea 
                 show={showPickTea} 
                 handleClose={() => setShowPickTea(false)} 
-                openTeaPickedModal={() => openTeaPickedModal()}
-                openInTheMoodForModal={() => openInTheMoodForModal()}
+                onHitMe={onHitMe}
+                onMoodFor={onMoodFor}
             />
             <Add
                 show={showAddTea}
@@ -205,18 +244,26 @@ export default function TeaPicker(){
                 current={pickedSession}
                 after={() => setShowTeaPicked(false)}
             />
+            <Add
+                show={showNewSession}
+                handleClose={() => setShowNewSession(false)}
+                openAddTeaModal={openAddSessionModal}
+                openAddVesselModal={openAddVesselModal}
+                type={"session"}
+                current={lastSession}
+            />
             <TeaPicked 
                 show={showTeaPicked} 
-                handleClose={() => setShowTeaPicked(false)} 
-                openPickTeaModal={() => openPickTeaModal()}
-                openAddSessionModal={() => openAddSessionModal()}
-                updatePicked={updatePicked}
+                handleClose={() => setShowTeaPicked(false)}
+                onAddPicked={onAddPicked}
+                onEditPicked={onEditPicked}
+                onTryAgain={onTryAgain}
             />
             <InTheMoodFor 
                 show={showInTheMoodFor}
                 handleClose={() => setShowInTheMoodFor(false)}
                 openTeaPickedModal={() => openTeaPickedModal()}
-                updatePicked={updatePicked}
+                onPickWithMood={onPickWithMood}
             />
         </>
     )
