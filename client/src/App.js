@@ -9,6 +9,7 @@ import Settings from './components/Settings.js';
 import { TeaProvider } from './contexts/TeaContext.js';
 import {VesselProvider} from "./contexts/VesselContext.js";
 import {SessionProvider} from "./contexts/SessionContext.js";
+import {AuthProvider} from "./contexts/AuthContext.js";
 
 
 function App() {
@@ -16,27 +17,24 @@ function App() {
     <>
       <Container> 
         <Router>
-        <Topbar />
-          <TeaProvider>
-            <VesselProvider>
-              <SessionProvider>
-                <Routes>
-                  <Route exact path="/" element={<TeaPicker />} />
-                  <Route path="/teas" element={<Teas />} />
-                  <Route path="/vessels" element={<Vessels />} />
-                  <Route path="/sessions" element={<Sessions />} />
-                  <Route path="/settings" element={<Settings />} />
-                </Routes>
-              </SessionProvider>
-
-            </VesselProvider>
-
-          </TeaProvider>
-
+          <AuthProvider>
+            <Topbar />
+            <TeaProvider>
+              <VesselProvider>
+                <SessionProvider>
+                  <Routes>
+                    <Route exact path="/" element={<TeaPicker />} />
+                    <Route path="/teas" element={<Teas />} />
+                    <Route path="/vessels" element={<Vessels />} />
+                    <Route path="/sessions" element={<Sessions />} />
+                    <Route path="/settings" element={<Settings />} />
+                  </Routes>
+                </SessionProvider>
+              </VesselProvider>
+            </TeaProvider>
+          </AuthProvider>
         </Router>
-        
       </Container>
-      
     </>
   );
 }
