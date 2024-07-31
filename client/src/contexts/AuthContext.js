@@ -10,7 +10,13 @@ export function useAuth(){
 
 export const AuthProvider = ({ children }) => {
 
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({
+        _id:"",
+        email:"",
+        password:"",
+        settings:{},
+        presets: []
+    });
     const [loggedIn, setLoggedIn] = useState(false);
     const [settings, setSettings] = useState({
         darkMode: true,
@@ -18,13 +24,15 @@ export const AuthProvider = ({ children }) => {
     });
     const [presets, setPresets] = useState([]);
 
-    function login(username, password){
-        axios.post(serverRoot + '/users/login', {
-            username: username,
+    function login(email, password){
+        axios.post(serverRoot + '/users/login/', {
+            email: email,
             password: password,
         }).then(response => {
             if (typeof response.data !== 'string') {
                 setUser(response.data)
+                setSettings(response.data.settings)
+                setPresets(response.data.presets)
                 setLoggedIn(true)
                 return true
             } else return false
@@ -41,19 +49,79 @@ export const AuthProvider = ({ children }) => {
         setPresets([]);
     }
 
-    function register(username, password){
-        axios.post(serverRoot + '/users', {
-            username: username,
+    function register(email, password){
+        axios.post(serverRoot + '/users/register/', {
+            email: email,
             password: password,
         }).then(response => {
             setUser(response.data)
+            setLoggedIn(true)
+            setSettings(response.data.settings)
+            setPresets(response.data.presets)
+            console.log(response)
         }).catch(error => {
-            console.log(error);
+            console.log(error)
         })
     }
 
-    function updateAccount(username, password){
+    function updateAccount(){
+        axios.patch(serverRoot + '/users/' + user._id, {
+            email: user.email,
+            password: user.password,
+            settings: user.settings,
+            presets: user.presets,
+        }).then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+    }
 
+    function resetPassword(password){
+        axios.patch(serverRoot + '/users/' + user._id, {
+            password: password,
+        }).then(response => {
+            console.log(response)
+            //TODO: password is not the hashed version, insecure
+            setUser({...user, password: password})
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    function updateEmail(email){
+        axios.patch(serverRoot + '/users/' + user._id, {
+            email: email,
+        }).then(response => {
+            console.log(response)
+            setUser({...user, email: email})
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    function addPreset(preset){
+        setPresets([...presets, preset])
+        setUser({...user, presets: [...user.presets, preset]})
+        axios.patch(serverRoot + '/users/' + user._id, {
+            presets: presets,
+        }).then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    function updateSettings(newSettings){
+        axios.patch(serverRoot + '/users/' + user._id, {
+            settings: newSettings,
+        }).then(response => {
+            console.log(response)
+            setUser({...user, settings: newSettings})
+            setSettings(newSettings)
+        }).catch(error => {
+            console.log(error)
+        })
     }
 
     function deleteAccount(){
@@ -68,13 +136,18 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{
+            user,
             settings,
             loggedIn,
             presets,
             login,
             logout,
             register,
-            deleteAccount
+            deleteAccount,
+            resetPassword,
+            addPreset,
+            updateEmail,
+            updateSettings
         }
         }>{children}</AuthContext.Provider>
     )

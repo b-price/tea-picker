@@ -1,35 +1,31 @@
 import React, { useRef, useState } from "react"
 import { Form, Button, Card, Alert } from "react-bootstrap"
-import { useAuth } from "../contexts/AuthContext"
-import { Link, useHistory } from "react-router-dom"
-import CreateUser from "./CreateUser";
+import { useAuth } from "../contexts/AuthContext.js"
+import {Link, useNavigate} from "react-router-dom"
 
 export default function Signup() {
   const emailRef = useRef()
-  const nameRef = useRef()
   const passwordRef = useRef()
   const passwordConfirmRef = useRef()
-  const { signup } = useAuth()
+  const { register } = useAuth()
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
-  const history = useHistory()
+  const navigate = useNavigate()
 
   async function handleSubmit(e) {
     e.preventDefault()
-
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       return setError("Passwords do not match")
     }
-
+    console.log(emailRef.current.value)
     try {
       setError("")
       setLoading(true)
-      await signup(emailRef.current.value, passwordRef.current.value)
-      history.push("/")
+      await register(emailRef.current.value, passwordRef.current.value)
+      navigate("/")
     } catch {
       setError("Failed to create an account")
     }
-
     setLoading(false)
   }
 
@@ -44,10 +40,6 @@ export default function Signup() {
             <Form.Group id="email">
               <Form.Label>Email</Form.Label>
               <Form.Control type="email" ref={emailRef} required />
-            </Form.Group>
-            <Form.Group id="name">
-              <Form.Label>Name</Form.Label>
-              <Form.Control type="name" ref={nameRef} required />
             </Form.Group>
             <Form.Group id="password">
               <Form.Label>Password</Form.Label>

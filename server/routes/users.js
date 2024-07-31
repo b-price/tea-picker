@@ -6,14 +6,18 @@ import { ObjectId } from "mongodb";
 const router = express.Router();
 
 // user registration
-router.post("/", async (req, res) => {
+router.post("/register", async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log(email, password)
         let collection = await db.collection("users");
         let emailExists = await collection.findOne({email: email});
         if (emailExists) {
             res.send("Email already exists");
-        } else {
+        } else if (!email) {
+            res.send("No email");
+        }
+        else {
             bcrypt.hash(password, 10).then(async hash => {
                 const user = {
                     email: email,
@@ -21,7 +25,7 @@ router.post("/", async (req, res) => {
                     preferences: { darkMode: true, favoriteMode: false },
                     presets: [],
                 };
-                let result = await collection.insertOne;
+                let result = await collection.insertOne(user);
                 res.send(result).status(204);
             })
         }

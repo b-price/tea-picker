@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, {useContext, useEffect, useState} from "react";
+import {useAuth} from "./AuthContext.js";
 
 const userid = "777"
 const serverRoot = 'http://localhost:5050';
@@ -11,6 +12,7 @@ export function useVessels() {
 
 export const VesselProvider = ({ children }) => {
 
+    const {user} = useAuth()
     const [teaTypes, setTeaTypes] = useState([])
     const [vendors, setVendors] = useState([])
     const [vesselTypes, setVesselTypes] = useState([])
@@ -19,7 +21,7 @@ export const VesselProvider = ({ children }) => {
     const [vesselLoading, setVesselLoading] = useState(true)
 
     useEffect(() => {
-        axios.get(`${serverRoot}/vessels/?user=${userid}`)
+        axios.get(`${serverRoot}/vessels/?user=${user._id}`)
             .then((response) => {
                 setVessels(sortVessels(response.data))
                 setVesselTypes([...new Set(response.data.map(vessel => vessel.type))])
@@ -62,7 +64,7 @@ export const VesselProvider = ({ children }) => {
             }
             return rawVessels
         }
-    }, [change])
+    }, [change, user])
 
     const [vessels, setVessels] = useState([
         {
@@ -100,7 +102,7 @@ export const VesselProvider = ({ children }) => {
             vessel.preferred = vessel.preferred.split(",")
         }
         axios.post(`${serverRoot}/vessels/`, {
-            user_id: userid,
+            user_id: user._id,
             name: vessel.name,
             type: vessel.type,
             capacity: +vessel.capacity,

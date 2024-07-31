@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, {useContext, useEffect, useState} from "react";
+import {useAuth} from "./AuthContext.js";
 
 const userid = "777"
 const serverRoot = 'http://localhost:5050';
@@ -13,6 +14,7 @@ export function useTea() {
 
 export const TeaProvider = ({ children }) => {
 
+    const {user, loggedIn} = useAuth()
     const [teaTypes, setTeaTypes] = useState([])
     const [vendors, setVendors] = useState([])
     const [years, setYears] = useState([])
@@ -22,7 +24,7 @@ export const TeaProvider = ({ children }) => {
     const [avRating, setAvRating] = useState(7)
 
     useEffect(() => {
-        axios.get(`${serverRoot}/teas/?user=${userid}`)
+        axios.get(`${serverRoot}/teas/?user=${user._id}`)
             .then((response) => {
                 setTeas(sortTeas(response.data))
                 setTeaTypes([...new Set(response.data.map(tea => tea.type))])
@@ -76,7 +78,7 @@ export const TeaProvider = ({ children }) => {
             }
             return rawTeas
         }
-    }, [change])
+    }, [change, user])
 
     const [teas, setTeas] = useState([{
         name: "",
@@ -126,7 +128,7 @@ export const TeaProvider = ({ children }) => {
             tea.tags = tea.tags.split(",")
         }
         axios.post(`${serverRoot}/teas/`, {
-            user_id: userid,
+            user_id: user._id,
             name: tea.name,
             type: tea.type,
             quantity: +tea.quantity,

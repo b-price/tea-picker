@@ -2,6 +2,7 @@ import axios from "axios";
 import React, {useContext, useEffect, useState} from "react";
 import {useTea} from "./TeaContext.js";
 import {useVessels} from "./VesselContext.js";
+import {useAuth} from "./AuthContext.js";
 
 const userid = "777"
 const serverRoot = 'http://localhost:5050';
@@ -13,6 +14,7 @@ export function useSession() {
 }
 
 export const SessionProvider = ({ children }) => {
+    const {user} = useAuth()
     const [sortQuery, setSortQuery] = useState("date")
     const [change, setChange] = useState(false)
     const [sessionLoading, setSessionLoading] = useState(true)
@@ -20,7 +22,7 @@ export const SessionProvider = ({ children }) => {
     const {vessels, getVessel, keywordsInVessel} = useVessels()
 
     useEffect(() => {
-        axios.get(`${serverRoot}/sessions/?user=${userid}`)
+        axios.get(`${serverRoot}/sessions/?user=${user._id}`)
             .then((response) => {
                 setSessions(sortSessions(response.data))
                 console.log(response.data)
@@ -65,7 +67,7 @@ export const SessionProvider = ({ children }) => {
             }
             return rawSessions
         }
-    }, [change])
+    }, [change, user])
 
     const [sessions, setSessions] = useState([
         {
@@ -92,7 +94,7 @@ export const SessionProvider = ({ children }) => {
 
     function addSession(session) {
         axios.post(`${serverRoot}/sessions/`, {
-            user_id: userid,
+            user_id: user._id,
             date: session.date,
             tea: session.tea,
             vessel: session.vessel,
@@ -110,7 +112,7 @@ export const SessionProvider = ({ children }) => {
 
     function editSession(attributes, id){
         axios.patch(`${serverRoot}/sessions/${id}`, {
-            user_id: userid,
+            user_id: user._id,
             date: attributes.date,
             tea: attributes.tea,
             vessel: attributes.vessel,
@@ -179,10 +181,10 @@ export const SessionProvider = ({ children }) => {
                 p = 3
             } else p = 1
             if (vessels[i].favorite){
-                if (favMode)
+                if (user.settings.favoriteMode)
                     f = 1
                 else f = 1.5
-            } else if (favMode)
+            } else if (user.settings.favoriteMode)
                 f = 0
             else f = 1
             cumulativeWeights[i] = p * d * f + (cumulativeWeights[i - 1] || 0)

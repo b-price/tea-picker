@@ -2,14 +2,12 @@ import {Button, Modal, Form, Row, Col, DropdownButton, DropdownItem, Alert} from
 import { useState } from "react";
 import {useTea} from "../contexts/TeaContext.js";
 import {useVessels} from "../contexts/VesselContext.js";
+import {useAuth} from "../contexts/AuthContext.js";
 
 export default function InTheMoodFor(props) {
     const {teaTypes, years, getMaxCost} = useTea()
     const {vessels} = useVessels()
-    //TODO: get/save presets from user settings
-    const [presets, setPresets] = useState([
-        {id: 0, name: "Preset 0", type: "Oolong", keywords: [], vessel: "", year: 2000, maxCost: getMaxCost(), minRating: 0}
-    ])
+    const {presets, addPreset} = useAuth()
     const [form, setForm] = useState({
         id: Math.random() * 10000, name: "", type: undefined, keywords: [], vessel: undefined, year: 0, maxCost: getMaxCost(), minRating: 0
     })
@@ -74,10 +72,11 @@ export default function InTheMoodFor(props) {
     }
     const handleSavePreset = () => {
         console.log(form)
-        setPresets([...presets, form])
+        addPreset(form)
         console.log(presets)
         setPresetNaming(false)
         setShowAlert(true)
+        setPresetSelect([getPresets()])
         setTimeout(() => {
             setShowAlert(false)
         }, 800)
